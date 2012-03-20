@@ -3,15 +3,15 @@
 
 #include <XThread.h>
 #include <XLocks.h>
-#include <List.h>
-#include <Delegate.h>
+#include <XList.h>
+#include <XDelegate.h>
 
 #if defined (TARGET_OS_UNIX)
 
 class TimerContext : private XThread
 {
 public:
-	typedef Delegate< void () > Handler;
+	typedef XDelegate< void () > Handler;
 
 public:
 	TimerContext()
@@ -50,7 +50,7 @@ public:
 			mTimers.Remove(mWaiting);
 			mWaiting = mTimers.End();
 		} else {
-			for (List<TimerEntry>::It it = mTimers.First(); it != mTimers.End(); ++it) {
+			for (XList<TimerEntry>::It it = mTimers.First(); it != mTimers.End(); ++it) {
 				if (mTimers[it].mHandler == h) {
 					mTimers.Remove(it);
 				}
@@ -136,7 +136,7 @@ private:
 			// TODO: maintain priority queue
 			mLock.Lock();
 			mWaiting = mTimers.First();
-			for (List<TimerEntry>::It it = mTimers.First()+1; it != mTimers.End(); ++it) {
+			for (XList<TimerEntry>::It it = mTimers.First()+1; it != mTimers.End(); ++it) {
 				if (TimevalCmp(mTimers[mWaiting].mExpires, mTimers[it].mExpires) > 0) {
 					mWaiting = it;
 				}
@@ -210,8 +210,8 @@ private:
 	}
 
 private:
-	List <TimerEntry>	mTimers;
-	List<TimerEntry>::It mWaiting;
+	XList <TimerEntry>	mTimers;
+	XList<TimerEntry>::It mWaiting;
 	int					mPipe[2];
 	XMutexRecursive		mLock;
 };
