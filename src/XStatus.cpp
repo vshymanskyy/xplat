@@ -1,0 +1,37 @@
+#include <XStatus.h>
+
+const char* XStatus::CodeStrings[XStatus::ERROR_CODE_QTY] = {
+	"OK",
+
+	"INVALID_ARG",
+	"NOT_IMPLEMENTED",
+	"NOT_SUPPORTED",
+
+	"CANCELED",
+	"TIMEOUT",
+
+	"INSUFF_RAM",
+	"INSUFF_HDD",
+	"INSUFF_CPU",
+	"INSUFF_GPU",
+	"INSUFF_NETWORK",
+	"INSUFF_DISPLAY",
+
+	"INVALID_HEADER",
+	"INVALID_DATA",
+	"CORRUPT_DATA",
+
+	"ALREADY_EXISTS",
+	"ACCESS_DENIED",
+	"NOT_AVALIABLE",
+	"NOT_FOUND",
+
+	"EMPTY",
+	"FULL",
+	"TOO_MANY",
+	"TOO_FEW",
+	"TOO_LARGE",
+	"TOO_SMALL",
+
+	"UNKNOWN_ERROR"
+};

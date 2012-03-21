@@ -1,9 +1,11 @@
 #pragma once
 
-#include <assert.h>
-#include <stddef.h>
+#ifndef __cplusplus
+#error "This C++ header was included in C file"
+#endif
 
-#include "XHelpers.h"
+#include <XDebug.h>
+#include <XHelpers.h>
 
 /// Represents a generic double-linked list
 template<class T>
@@ -14,15 +16,15 @@ private:
 	struct Node
 	{
 		/// Pointer to previous item
-		Node *_prev;
+		Node *mPrev;
 		/// Pointer to next item
-		Node *_next;
+		Node *mNext;
 		/// The data
-		T _data;
+		T mData;
 
 		/// Constructor
 		explicit Node(const T& data, Node* prev, Node* next)
-				: _prev(prev), _next(next), _data(data)
+				: mPrev(prev), mNext(next), mData(data)
 		{
 		}
 	};
@@ -31,13 +33,13 @@ private:
 	struct EndNode
 	{
 		/// Pointer to last item
-		Node *_last;
+		Node *mLast;
 		/// Pointer to first item
-		Node *_first;
+		Node *mFirst;
 
 		/// Constructor
 		EndNode()
-				: _last((Node*) this), _first((Node*) this)
+				: mLast((Node*) this), mFirst((Node*) this)
 		{
 		}
 	};
@@ -51,12 +53,12 @@ public:
 
 	private:
 		/// Pointer to node
-		Node* _node;
+		Node* mNode;
 
 	public:
 		/// Constructor
 		explicit It(Node* node)
-				: _node(node)
+				: mNode(node)
 		{
 		}
 
@@ -68,24 +70,24 @@ public:
 		/// Comparison operator
 		bool operator ==(const It& it) const
 		{
-			return _node == it._node;
+			return mNode == it.mNode;
 		}
 		/// Comparison operator
 		bool operator !=(const It& it) const
 		{
-			return _node != it._node;
+			return mNode != it.mNode;
 		}
 
 		/// Moves to next item
 		It& operator ++()
 		{
-			_node = _node->_next;
+			mNode = mNode->mNext;
 			return (*this);
 		}
 		/// Moves to previous item
 		It& operator --()
 		{
-			_node = _node->_prev;
+			mNode = mNode->mPrev;
 			return (*this);
 		}
 
@@ -94,7 +96,7 @@ public:
 		{
 			It res = *this;
 			while (i--) {
-				res._node = res._node->_next;
+				res.mNode = res.mNode->mNext;
 			}
 			return res;
 		}
@@ -103,7 +105,7 @@ public:
 		{
 			It res = *this;
 			while (i--) {
-				res._node = res._node->_prev;
+				res.mNode = res.mNode->mPrev;
 			}
 			return res;
 		}
@@ -115,7 +117,7 @@ public:
 public:
 	/// Constructor
 	XList()
-			: _count(0)
+			: mCount(0)
 	{
 	}
 
@@ -134,31 +136,31 @@ public:
 	/// Returns the size of the list
 	unsigned Count() const
 	{
-		return _count;
+		return mCount;
 	}
 
 	/// Checks if list is empty
 	bool IsEmpty() const
 	{
-		return !_count;
+		return !mCount;
 	}
 
 	/// Returns the amount of memory in bytes that is used by this list
 	size_t MemoryConsumption()
 	{
-		return sizeof(XList) + sizeof(Node) * _count;
+		return sizeof(XList) + sizeof(Node) * mCount;
 	}
 
 	/// Returns the first item in the list
 	T& Front() const
 	{
-		return _head._first->_data;
+		return mHead.mFirst->mData;
 	}
 
 	/// Returns the last item in the list
 	T& Back() const
 	{
-		return _head._last->_data;
+		return mHead.mLast->mData;
 	}
 
 	/// Returns the first item in the list
@@ -178,51 +180,51 @@ public:
 	/// Returns iterator that points to the first item in the list
 	It First() const
 	{
-		return It(_head._first);
+		return It(mHead.mFirst);
 	}
 
 	/// Returns iterator that points to the last item in the list
 	It Last() const
 	{
-		return It(_head._last);
+		return It(mHead.mLast);
 	}
 
 	/// Returns iterator that represents the end of the list
 	It End() const
 	{
-		return It((Node*) &_head);
+		return It((Node*) &mHead);
 	}
 
 	/// @param it Iterator
 	/// @returns An item at iterator position
 	T& operator[](const It& it)
 	{
-		assert(it != End());
-		return it._node->_data;
+		XASSERT(it != End());
+		return it.mNode->mData;
 	}
 
 	/// @param it Iterator
 	/// @returns Constant item at iterator position
 	const T& operator[](const It& it) const
 	{
-		assert(it != End());
-		return it._node->_data;
+		XASSERT(it != End());
+		return it.mNode->mData;
 	}
 
 	/// @param it Iterator
 	/// @returns An item at iterator position
 	T& Get(const It& it)
 	{
-		assert(it != End());
-		return it._node->_data;
+		XASSERT(it != End());
+		return it.mNode->mData;
 	}
 
 	/// @param it Iterator
 	/// @returns Constant item at iterator position
 	const T& Get(const It& it) const
 	{
-		assert(it != End());
-		return it._node->_data;
+		XASSERT(it != End());
+		return it.mNode->mData;
 	}
 
 	/// Clears the list and removes all nodes
@@ -263,25 +265,25 @@ public:
 
 	void SwapLinks(const It& a, const It& b)
 	{
-		a._node->_prev->_next = b._node;
-		a._node->_next->_prev = b._node;
-		b._node->_prev->_next = a._node;
-		b._node->_next->_prev = a._node;
-		Swap(a._node->_prev, b._node->_prev);
-		Swap(a._node->_next, b._node->_next);
+		a.mNode->mPrev->mNext = b.mNode;
+		a.mNode->mNext->mPrev = b.mNode;
+		b.mNode->mPrev->mNext = a.mNode;
+		b.mNode->mNext->mPrev = a.mNode;
+		Swap(a.mNode->mPrev, b.mNode->mPrev);
+		Swap(a.mNode->mNext, b.mNode->mNext);
 	}
 
 	void SwapValues(const It& a, const It& b)
 	{
-		Swap(a._node->_data, b._node->_data);
+		Swap(a.mNode->mData, b.mNode->mData);
 	}
 
 	void Reverse()
 	{
 		for (It it = First(); it != End(); --it) {
-			Swap(it._node->_prev, it._node->_next);
+			Swap(it.mNode->mPrev, it.mNode->mNext);
 		}
-		Swap(_head._last, _head._first);
+		Swap(mHead.mLast, mHead.mFirst);
 	}
 
 	void RotateLeft(int n = 1)
@@ -296,9 +298,9 @@ public:
 
 private:
 	/// Ending of list
-	EndNode _head;
+	EndNode mHead;
 	/// Count of items
-	unsigned _count;
+	unsigned mCount;
 };
 
 //*******************************************
@@ -307,7 +309,7 @@ private:
 
 template<class T>
 XList<T>::XList(const XList& lst)
-		: _count(0)
+		: mCount(0)
 {
 	for (It it = lst.First(); it != lst.End(); ++it) {
 		Append(lst[it]);
@@ -329,75 +331,75 @@ template<class T>
 void XList<T>::Clear()
 {
 	Node* tmp;
-	Node* c = _head._first;
-	while (c != (Node*) &_head) {
+	Node* c = mHead.mFirst;
+	while (c != (Node*) &mHead) {
 		tmp = c;
-		c = c->_next;
+		c = c->mNext;
 		delete tmp;
 	}
-	_head._first = (Node*) &_head;
-	_head._last = (Node*) &_head;
-	_count = 0;
+	mHead.mFirst = (Node*) &mHead;
+	mHead.mLast = (Node*) &mHead;
+	mCount = 0;
 }
 
 template<class T>
 void XList<T>::Append(const T& item)
 {
-	Node*& prev = _head._last;
-	Node* const node = new Node(item, prev, (Node*) &_head);
-	assert(node);
-	prev->_next = node;
+	Node*& prev = mHead.mLast;
+	Node* const node = new Node(item, prev, (Node*) &mHead);
+	XASSERT(node);
+	prev->mNext = node;
 	prev = node;
-	_count++;
+	mCount++;
 }
 
 template<class T>
 void XList<T>::Prepend(const T& item)
 {
-	Node*& next = _head._first;
-	Node* const node = new Node(item, (Node*) &_head, next);
-	assert(node);
-	next->_prev = node;
+	Node*& next = mHead.mFirst;
+	Node* const node = new Node(item, (Node*) &mHead, next);
+	XASSERT(node);
+	next->mPrev = node;
 	next = node;
-	_count++;
+	mCount++;
 }
 
 template<class T>
 void XList<T>::InsertAfter(It& it, const T& item)
 {
-	Node*& next = it._node->_next;
-	Node* const node = new Node(item, it._node, next);
-	assert(node);
-	next->_prev = node;
+	Node*& next = it.mNode->mNext;
+	Node* const node = new Node(item, it.mNode, next);
+	XASSERT(node);
+	next->mPrev = node;
 	next = node;
-	it._node = node;
-	_count++;
+	it.mNode = node;
+	mCount++;
 }
 
 template<class T>
 void XList<T>::InsertBefore(It& it, const T& item)
 {
-	Node*& prev = it._node->_prev;
-	Node* const node = new Node(item, prev, it._node);
-	assert(node);
-	prev->_next = node;
+	Node*& prev = it.mNode->mPrev;
+	Node* const node = new Node(item, prev, it.mNode);
+	XASSERT(node);
+	prev->mNext = node;
 	prev = node;
-	it._node = node;
-	_count++;
+	it.mNode = node;
+	mCount++;
 }
 
 template<class T>
 T XList<T>::Remove(It& it)
 {
-	assert(it != End());
-	Node* const next = it._node->_next;
-	Node* const prev = it._node->_prev;
-	prev->_next = next;
-	next->_prev = prev;
-	T result = it._node->_data;
-	delete it._node;
-	it._node = prev;
-	_count--;
+	XASSERT(it != End());
+	Node* const next = it.mNode->mNext;
+	Node* const prev = it.mNode->mPrev;
+	prev->mNext = next;
+	next->mPrev = prev;
+	T result = it.mNode->mData;
+	delete it.mNode;
+	it.mNode = prev;
+	mCount--;
 	return result;
 }
 
@@ -405,7 +407,7 @@ template<class T>
 typename XList<T>::It XList<T>::FindAfter(const It& i, const T& item) const
 {
 	for (It it = i; it != End(); ++it) {
-		if (it._node->_data == item)
+		if (it.mNode->mData == item)
 			return it;
 	}
 	return End();
@@ -415,7 +417,7 @@ template<class T>
 typename XList<T>::It XList<T>::FindBefore(const It& i, const T& item) const
 {
 	for (It it = i; it != End(); --it) {
-		if (it._node->_data == item)
+		if (it.mNode->mData == item)
 			return it;
 	}
 	return End();

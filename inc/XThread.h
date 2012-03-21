@@ -1,6 +1,10 @@
 #ifndef THREAD_H
 #define THREAD_H
 
+#ifndef __cplusplus
+#error "This C++ header was included in C file"
+#endif
+
 #include "XPlat.h"
 
 #if defined (TARGET_OS_WINDOWS)

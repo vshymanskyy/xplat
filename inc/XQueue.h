@@ -1,10 +1,6 @@
 #ifndef INC_QUEUE_HPP
 #define INC_QUEUE_HPP
 
-#if _MSC_VER > 1000
-	#pragma once
-#endif
-
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
 #endif
@@ -85,7 +81,7 @@ XQueue<T, SIZE>::Push(const T& info)
 {
 	_data[_inIdx] = info;
 	_inIdx = (_inIdx+1)%SIZE;
-	XASSERT_NE(_inIdx, _outIdx);		//overflow
+	XASSERT_NE(_inIdx, _outIdx, "%d");		//overflow
 }
 
 template<class T, unsigned SIZE>
@@ -94,7 +90,7 @@ T
 XQueue<T, SIZE>::Pop()
 {
 	_outIdx = (_outIdx+1)%SIZE;
-	XASSERT_NE(_outIdx, _inIdx);		//underflow
+	XASSERT_NE(_outIdx, _inIdx, "%d");		//underflow
 	return _data[_outIdx];
 }
 
@@ -104,7 +100,7 @@ T
 XQueue<T, SIZE>::Peek()
 {
 	const int p = (_outIdx+1)%SIZE;
-	XASSERT_NE(p, _inIdx);			//underflow
+	XASSERT_NE(p, _inIdx, "%d");			//underflow
 	return _data[p];
 }
 

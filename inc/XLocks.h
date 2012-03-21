@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef __cplusplus
+#error "This C++ header was included in C file"
+#endif
+
 #define LOCKABLE class LOCK = XLockStub
 
 class XLockStub {

@@ -1,37 +1,27 @@
-#ifndef INC_BACKTRACE_HPP
-#define INC_BACKTRACE_HPP
-
-#if _MSC_VER > 1000
-	#pragma once
-#endif
+#ifndef INC_XDEBUG_HPP
+#define INC_XDEBUG_HPP
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
 #endif
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <XPlat.h>
 
 #if defined(WIN32)
-	#define DEBUG_BREAK(msg) { fprintf(stderr, "Debug break: '%s'\n", msg); DebugBreak(); }
-#elif defined (__GNUC__)
-	#define DEBUG_BREAK(msg) { fprintf(stderr, "Debug break: '%s'\n", msg); *(char*)(NULL) = 0xFF; }	// SEGV!!!
+	#define XDEBUG_BREAK() { DebugBreak(); }
 #else
-	#define DEBUG_BREAK(msg) { fprintf(stderr, "Debug break: '%s' <skipped>\n", msg); }
+	#define XDEBUG_BREAK() { *(char*)(NULL) = 0xFF; } // SEGV!!!
 #endif
 
-#if defined(__GLIBC__)
-	#define HAS_BACKTRACE
-#else
-	#undef HAS_BACKTRACE
-#endif
+#define XDEBUG_PRINT_FAIL(...) // TODO
 
-#ifdef HAS_BACKTRACE
+#define XASSERT(expr) { if (!(expr)) { XDEBUG_PRINT_FAIL("Assertion '" #expr "' failed at %s:%d", CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
+#define XASSERT_EQ(expr, val, fmt) { if (!((expr) == (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " == " #val "' failed ( " fmt " != " fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
+#define XASSERT_NE(expr, val, fmt) { if (!((expr) != (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " != " #val "' failed ( " fmt " == " fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
+#define XASSERT_GT(expr, val, fmt) { if (!((expr) >  (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " > "  #val "' failed ( " fmt " <= " fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
+#define XASSERT_GE(expr, val, fmt) { if (!((expr) >= (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " >= " #val "' failed ( " fmt " < "  fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
+#define XASSERT_LT(expr, val, fmt) { if (!((expr) <  (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " < "  #val "' failed ( " fmt " >= " fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
+#define XASSERT_LE(expr, val, fmt) { if (!((expr) <= (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " <= " #val "' failed ( " fmt " > "  fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
 
-int backtrace_save(void** addrs, int maxlen);
 
-size_t backtrace_print(char* buff, size_t maxlen, void* const* addrs, int skip);
-
-#endif
-
-#endif // INC_BACKTRACE_HPP
+#endif // INC_XDEBUG_HPP

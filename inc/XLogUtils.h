@@ -1,10 +1,6 @@
 #ifndef INC_LOG_UTILS_HPP
 #define INC_LOG_UTILS_HPP
 
-#if _MSC_VER > 1000
-#pragma once
-#endif
-
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
 #endif

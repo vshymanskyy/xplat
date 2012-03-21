@@ -1,6 +1,10 @@
 #ifndef TIMER_H_
 #define TIMER_H_
 
+#ifndef __cplusplus
+#error "This C++ header was included in C file"
+#endif
+
 #include <XThread.h>
 #include <XLocks.h>
 #include <XList.h>
