@@ -12,13 +12,13 @@
 
 #if defined (TARGET_OS_UNIX)
 
-class TimerContext : private XThread
+class XTimerContext : private XThread
 {
 public:
 	typedef XDelegate< void () > Handler;
 
 public:
-	TimerContext()
+	XTimerContext()
 		: mWaiting(mTimers.End())
 	{
 		if (pipe(mPipe) == -1) {
@@ -28,7 +28,7 @@ public:
 		Start();
 	}
 
-	virtual ~TimerContext() {
+	virtual ~XTimerContext() {
 		Stop();
 		Wait();
 		close(mPipe[0]);
