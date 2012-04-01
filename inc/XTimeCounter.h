@@ -1,6 +1,10 @@
 #ifndef PERFTIMER_H_
 #define PERFTIMER_H_
 
+#ifndef __cplusplus
+#error "This C++ header was included in C file"
+#endif
+
 #if defined(WIN32)
 
 	#include <windows.h>

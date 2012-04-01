@@ -1,10 +1,6 @@
 #ifndef INC_STACK_HPP
 #define INC_STACK_HPP
 
-#if _MSC_VER > 1000
-	#pragma once
-#endif
-
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
 #endif
@@ -43,15 +39,15 @@ public:
 
 private:
 	/// Data buffer
-    T  _data[SIZE];
+    T  mData[SIZE];
 	/// The 'top' element of the stack
-    T* _top;
+    T* mTop;
 };
 
 template <class T, unsigned SIZE>
 inline
 XStack<T, SIZE>::XStack()
-    : _top	(&_data[0])
+    : mTop	(&mData[0])
 {
 }
 
@@ -66,7 +62,7 @@ inline
 bool
 XStack<T, SIZE>::IsEmpty() const
 {
-    return (_top <= &_data[0]);
+    return (mTop <= &mData[0]);
 }
 
 template<class T, unsigned SIZE>
@@ -74,7 +70,7 @@ inline
 bool
 XStack<T, SIZE>::IsFull() const
 {
-    return (_top >= &_data[SIZE]);
+    return (mTop >= &mData[SIZE]);
 }
 
 template <class T, unsigned SIZE>
@@ -82,7 +78,7 @@ inline
 void
 XStack<T, SIZE>::Push(const T& item)
 {
-    *(_top++) = item;
+    *(mTop++) = item;
 }
 
 template <class T, unsigned SIZE>
@@ -90,7 +86,7 @@ inline
 T
 XStack<T, SIZE>::Pop()
 {
-    return *(--_top);
+    return *(--mTop);
 }
 
 template <class T, unsigned SIZE>
@@ -98,9 +94,9 @@ inline
 bool
 XStack<T, SIZE>::Peek(T& item)
 {
-    if (_top <= &_data[0])		//underflow
+    if (mTop <= &mData[0])		//underflow
 		return false;
-    item = *(_top-1);
+    item = *(mTop-1);
 	return true;
 }
 

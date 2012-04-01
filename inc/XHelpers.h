@@ -1,88 +1,52 @@
 #ifndef INC_HELPERS_HPP
 #define INC_HELPERS_HPP
 
+#ifndef __cplusplus
+#error "This C++ header was included in C file"
+#endif
+
 #include <stdlib.h>
+#include <string.h>
 #include <XPlat.h>
 
 template<typename T>
-void Swap(T& a, T& b)
-{
-	const T t = a;
-	a = b;
-	b = t;
-}
+void Swap(T& a, T& b) { const T t = a; a = b; b = t; }
 
 template<typename T>
-const T& Min(const T& a, const T& b)
-{
-	return ((a < b) ? a : b);
-}
+const T& Min(const T& a, const T& b) { return ((a < b) ? a : b); }
 
 template<typename T>
-const T& Max(const T& a, const T& b)
-{
-	return ((a > b) ? a : b);
-}
+const T& Max(const T& a, const T& b) { return ((a > b) ? a : b); }
 
 template<typename T>
-T& Min(T& a, T& b)
-{
-	return ((a < b) ? a : b);
-}
+T& Min(T& a, T& b) { return ((a < b) ? a : b); }
 
 template<typename T>
-T& Max(T& a, T& b)
-{
-	return ((a > b) ? a : b);
-}
+T& Max(T& a, T& b) { return ((a > b) ? a : b); }
 
 template<typename T>
-const T& Min(const T& a, const T& b, const T& c)
-{
-	return Min(Min(a, b), c);
-}
+const T& Min(const T& a, const T& b, const T& c) { return Min(Min(a, b), c); }
 
 template<typename T>
-const T& Max(const T& a, const T& b, const T& c)
-{
-	return Max(Max(a, b), c);
-}
+const T& Max(const T& a, const T& b, const T& c) { return Max(Max(a, b), c); }
 
 template<typename T>
-T& Min(T& a, T& b, T& c)
-{
-	return Min(Min(a, b), c);
-}
+T& Min(T& a, T& b, T& c) { return Min(Min(a, b), c); }
 
 template<typename T>
-T& Max(T& a, T& b, T& c)
-{
-	return Max(Max(a, b), c);
-}
+T& Max(T& a, T& b, T& c) { return Max(Max(a, b), c); }
 
 template<typename T>
-const T& Min(const T& a, const T& b, const T& c, const T& d)
-{
-	return Min(Min(Min(a, b), c), d);
-}
+const T& Min(const T& a, const T& b, const T& c, const T& d) { return Min(Min(Min(a, b), c), d); }
 
 template<typename T>
-const T& Max(const T& a, const T& b, const T& c, const T& d)
-{
-	return Max(Max(Max(a, b), c), d);
-}
+const T& Max(const T& a, const T& b, const T& c, const T& d) { return Max(Max(Max(a, b), c), d); }
 
 template<typename T>
-T& Min(T& a, T& b, T& c, T& d)
-{
-	return Min(Min(Min(a, b), c), d);
-}
+T& Min(T& a, T& b, T& c, T& d) { return Min(Min(Min(a, b), c), d); }
 
 template<typename T>
-T& Max(T& a, T& b, T& c, T& d)
-{
-	return Max(Max(Max(a, b), c), d);
-}
+T& Max(T& a, T& b, T& c, T& d) { return Max(Max(Max(a, b), c), d); }
 
 template<typename T>
 T AbsDiff(const T& v1, const T& v2)
@@ -106,6 +70,24 @@ template<typename T>
 bool OutOfRange(const T& x, const T& a, const T& b)
 {
 	return (x < Min(a, b) || Max(a, b) < x);
+}
+
+template <typename T>
+T ClampRange(const T& x, const T& a, const T& b)
+{
+	if (x > Max(a, b)) {
+		return Max(a, b);
+	} else if (x < Min(a, b)) {
+		return Min(a, b);
+	} else {
+		return x;
+	}
+}
+
+template <typename T>
+T LinearMap(T x, T in_min, T in_max, T out_min, T out_max)
+{
+	return ClampRange((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min, out_min, out_max);
 }
 
 inline

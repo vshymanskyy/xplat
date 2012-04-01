@@ -1,6 +1,10 @@
 #ifndef CMD_SHELL_H_
 #define CMD_SHELL_H_
 
+#ifndef __cplusplus
+#error "This C++ header was included in C file"
+#endif
+
 #include "XThread.h"
 #include "XDelegate.h"
 #include "XList.h"

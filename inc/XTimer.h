@@ -1,6 +1,10 @@
 #ifndef TIMER_H_
 #define TIMER_H_
 
+#ifndef __cplusplus
+#error "This C++ header was included in C file"
+#endif
+
 #include <XThread.h>
 #include <XLocks.h>
 #include <XList.h>
@@ -8,30 +12,30 @@
 
 #if defined (TARGET_OS_UNIX)
 
-class TimerContext : private XThread
+class XTimerContext : private XThread
 {
 public:
 	typedef XDelegate< void () > Handler;
 
 public:
-	TimerContext()
+	XTimerContext()
 		: mWaiting(mTimers.End())
 	{
 		if (pipe(mPipe) == -1) {
-			assert(false);
+			XASSERT(false);
 		}
 
 		Start();
 	}
 
-	virtual ~TimerContext() {
+	virtual ~XTimerContext() {
 		Stop();
 		Wait();
 		close(mPipe[0]);
 		close(mPipe[1]);
 	}
 
-	void SetTimer(uint32_t ms, uint32_t repeat, Handler h) {
+	void SetTimer(Handler h, uint32_t ms, uint32_t repeat = 0) {
 		TimerEntry entry;
 		gettimeofday(&entry.mExpires, NULL);
 		TimevalAddMs(&entry.mExpires, ms);
@@ -196,7 +200,7 @@ private:
 				return 0;
 			}*/ else {
 				// Error
-				assert(false);
+				XASSERT(false);
 			}
 		}
 		return 0;
@@ -205,7 +209,7 @@ private:
 	void Wake() {
 		char ctrl = '.';
 		if (write(mPipe[1], &ctrl, 1) != 1) {
-			assert(false);
+			XASSERT(false);
 		}
 	}
 

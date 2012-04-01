@@ -4,7 +4,6 @@
 #include <cxxtest/TestSuite.h>
 
 #include <math.h>
-#include "KadContact.h"
 
 class LogTS: public CxxTest::TestSuite
 {
