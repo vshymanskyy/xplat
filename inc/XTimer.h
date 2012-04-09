@@ -22,7 +22,7 @@ public:
 		: mWaiting(mTimers.End())
 	{
 		if (pipe(mPipe) == -1) {
-			assert(false);
+			XASSERT(false);
 		}
 
 		Start();
@@ -35,7 +35,7 @@ public:
 		close(mPipe[1]);
 	}
 
-	void SetTimer(uint32_t ms, uint32_t repeat, Handler h) {
+	void SetTimer(Handler h, uint32_t ms, uint32_t repeat = 0) {
 		TimerEntry entry;
 		gettimeofday(&entry.mExpires, NULL);
 		TimevalAddMs(&entry.mExpires, ms);
@@ -200,7 +200,7 @@ private:
 				return 0;
 			}*/ else {
 				// Error
-				assert(false);
+				XASSERT(false);
 			}
 		}
 		return 0;
@@ -209,7 +209,7 @@ private:
 	void Wake() {
 		char ctrl = '.';
 		if (write(mPipe[1], &ctrl, 1) != 1) {
-			assert(false);
+			XASSERT(false);
 		}
 	}
 

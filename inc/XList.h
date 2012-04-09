@@ -232,26 +232,50 @@ public:
 
 	/// Appends an item to the back of the list
 	/// @param item Item to append
-	void Append(const T& item);
+	XList<T>::It Append(const T& item);
 
 	/// Prepends an item to the front of the list
 	/// @param item Item to prepend
-	void Prepend(const T& item);
+	XList<T>::It Prepend(const T& item);
 
 	/// Inserts an item after a specified iterator
 	/// @param it Iterator
 	/// @param item Item to insert
-	void InsertAfter(It& it, const T& item);
+	XList<T>::It InsertAfter(It& it, const T& item);
 
 	/// Inserts an item before a specified iterator
 	/// @param it Iterator
 	/// @param item Item to insert
-	void InsertBefore(It& it, const T& item);
+	XList<T>::It InsertBefore(It& it, const T& item);
 
 	/// Removes an item that is pointed to by a specified iterator
 	/// Iterator is automatically decreased
 	/// @param it Iterator
 	T Remove(It& it);
+
+	/// Finds first occurrence of an item
+	/// @param item Item to find
+	/// @returns Iterator pointing to found item or End if not found
+	template <class Operation>
+	It FindBefore(const It& i, Operation op) const {
+		for (It it = i; it != End(); ++it) {
+			if (op(it.mNode->mData))
+				return it;
+		}
+		return End();
+	}
+
+	/// Finds last occurrence of an item
+	/// @param item Item to find
+	/// @returns Iterator pointing to found item or End if not found
+	template <class Operation>
+	It FindAfter(const It& i, Operation op) const {
+		for (It it = i; it != End(); ++it) {
+			if (op(it.mNode->mData))
+				return it;
+		}
+		return End();
+	}
 
 	/// Finds first occurrence of an item
 	/// @param item Item to find
@@ -343,7 +367,7 @@ void XList<T>::Clear()
 }
 
 template<class T>
-void XList<T>::Append(const T& item)
+typename XList<T>::It XList<T>::Append(const T& item)
 {
 	Node*& prev = mHead.mLast;
 	Node* const node = new Node(item, prev, (Node*) &mHead);
@@ -351,10 +375,11 @@ void XList<T>::Append(const T& item)
 	prev->mNext = node;
 	prev = node;
 	mCount++;
+	return It(node);
 }
 
 template<class T>
-void XList<T>::Prepend(const T& item)
+typename XList<T>::It XList<T>::Prepend(const T& item)
 {
 	Node*& next = mHead.mFirst;
 	Node* const node = new Node(item, (Node*) &mHead, next);
@@ -362,10 +387,11 @@ void XList<T>::Prepend(const T& item)
 	next->mPrev = node;
 	next = node;
 	mCount++;
+	return It(node);
 }
 
 template<class T>
-void XList<T>::InsertAfter(It& it, const T& item)
+typename XList<T>::It XList<T>::InsertAfter(It& it, const T& item)
 {
 	Node*& next = it.mNode->mNext;
 	Node* const node = new Node(item, it.mNode, next);
@@ -374,10 +400,11 @@ void XList<T>::InsertAfter(It& it, const T& item)
 	next = node;
 	it.mNode = node;
 	mCount++;
+	return it;
 }
 
 template<class T>
-void XList<T>::InsertBefore(It& it, const T& item)
+typename XList<T>::It XList<T>::InsertBefore(It& it, const T& item)
 {
 	Node*& prev = it.mNode->mPrev;
 	Node* const node = new Node(item, prev, it.mNode);
@@ -386,6 +413,7 @@ void XList<T>::InsertBefore(It& it, const T& item)
 	prev = node;
 	it.mNode = node;
 	mCount++;
+	return it;
 }
 
 template<class T>
@@ -402,6 +430,7 @@ T XList<T>::Remove(It& it)
 	mCount--;
 	return result;
 }
+
 
 template<class T>
 typename XList<T>::It XList<T>::FindAfter(const It& i, const T& item) const
