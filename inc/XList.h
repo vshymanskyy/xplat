@@ -345,7 +345,7 @@ XList<T>&
 XList<T>::operator =(const XList& lst)
 {
 	Clear();
-	for (It it = lst.First(); it != lst.End(); it++) {
+	for (It it = lst.First(); it != lst.End(); ++it) {
 		Append(lst[it]);
 	}
 	return *this;
