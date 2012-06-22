@@ -199,7 +199,7 @@ public:
 	/// @returns An item at iterator position
 	T& operator[](const It& it)
 	{
-		XASSERT(it != End());
+		X_ASSERT(it != End());
 		return it.mNode->mData;
 	}
 
@@ -207,7 +207,7 @@ public:
 	/// @returns Constant item at iterator position
 	const T& operator[](const It& it) const
 	{
-		XASSERT(it != End());
+		X_ASSERT(it != End());
 		return it.mNode->mData;
 	}
 
@@ -215,7 +215,7 @@ public:
 	/// @returns An item at iterator position
 	T& Get(const It& it)
 	{
-		XASSERT(it != End());
+		X_ASSERT(it != End());
 		return it.mNode->mData;
 	}
 
@@ -223,7 +223,7 @@ public:
 	/// @returns Constant item at iterator position
 	const T& Get(const It& it) const
 	{
-		XASSERT(it != End());
+		X_ASSERT(it != End());
 		return it.mNode->mData;
 	}
 
@@ -232,21 +232,21 @@ public:
 
 	/// Appends an item to the back of the list
 	/// @param item Item to append
-	XList<T>::It Append(const T& item);
+	It Append(const T& item);
 
 	/// Prepends an item to the front of the list
 	/// @param item Item to prepend
-	XList<T>::It Prepend(const T& item);
+	It Prepend(const T& item);
 
 	/// Inserts an item after a specified iterator
 	/// @param it Iterator
 	/// @param item Item to insert
-	XList<T>::It InsertAfter(It& it, const T& item);
+	It InsertAfter(It& it, const T& item);
 
 	/// Inserts an item before a specified iterator
 	/// @param it Iterator
 	/// @param item Item to insert
-	XList<T>::It InsertBefore(It& it, const T& item);
+	It InsertBefore(It& it, const T& item);
 
 	/// Removes an item that is pointed to by a specified iterator
 	/// Iterator is automatically decreased
@@ -371,7 +371,7 @@ typename XList<T>::It XList<T>::Append(const T& item)
 {
 	Node*& prev = mHead.mLast;
 	Node* const node = new Node(item, prev, (Node*) &mHead);
-	XASSERT(node);
+	X_ASSERT(node);
 	prev->mNext = node;
 	prev = node;
 	mCount++;
@@ -383,7 +383,7 @@ typename XList<T>::It XList<T>::Prepend(const T& item)
 {
 	Node*& next = mHead.mFirst;
 	Node* const node = new Node(item, (Node*) &mHead, next);
-	XASSERT(node);
+	X_ASSERT(node);
 	next->mPrev = node;
 	next = node;
 	mCount++;
@@ -395,7 +395,7 @@ typename XList<T>::It XList<T>::InsertAfter(It& it, const T& item)
 {
 	Node*& next = it.mNode->mNext;
 	Node* const node = new Node(item, it.mNode, next);
-	XASSERT(node);
+	X_ASSERT(node);
 	next->mPrev = node;
 	next = node;
 	it.mNode = node;
@@ -408,7 +408,7 @@ typename XList<T>::It XList<T>::InsertBefore(It& it, const T& item)
 {
 	Node*& prev = it.mNode->mPrev;
 	Node* const node = new Node(item, prev, it.mNode);
-	XASSERT(node);
+	X_ASSERT(node);
 	prev->mNext = node;
 	prev = node;
 	it.mNode = node;
@@ -419,7 +419,7 @@ typename XList<T>::It XList<T>::InsertBefore(It& it, const T& item)
 template<class T>
 T XList<T>::Remove(It& it)
 {
-	XASSERT(it != End());
+	X_ASSERT(it != End());
 	Node* const next = it.mNode->mNext;
 	Node* const prev = it.mNode->mPrev;
 	prev->mNext = next;

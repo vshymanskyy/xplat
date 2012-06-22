@@ -4,6 +4,9 @@
 #include <stdio.h>
 
 struct ISerial {
+
+	virtual ~ISerial() {}
+
 	virtual ssize_t Write(const void* data, unsigned length) = 0;
 	virtual ssize_t Read(void* data, unsigned length) = 0;
 

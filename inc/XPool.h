@@ -14,7 +14,7 @@ class XPool {
 public:
     XPool() {
         for (int i=0; i<QTY; i++) {
-            mFree.Push(_data+i*sizeof(T));
+            mFree.Push(mData+i*sizeof(T));
         };
     };
 
@@ -23,17 +23,17 @@ public:
     }
 
     T* Allocate() {
-        XASSERT(!mFree.IsEmpty());
+        X_ASSERT(!mFree.IsEmpty());
         return (T*)mFree.Pop();
     }
 
     void Release(void* ptr) {
-    	XASSERT(!mFree.IsFull());
+    	X_ASSERT(!mFree.IsFull());
         mFree.Push(ptr);
     }
 
 private:
-    char              _data[sizeof(T)*QTY];
+    char              mData[sizeof(T)*QTY];
     XStack<void*, QTY> mFree;
 };
 

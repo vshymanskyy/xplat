@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "Locks.h"
+#include "XLocks.h"
 
 template < typename T, LOCKABLE >
 class ActBuffer

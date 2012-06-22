@@ -53,32 +53,32 @@ private:
 	static const char* CodeStrings[ERROR_CODE_QTY];
 
 private:
-	Code _code;
+	Code mCode;
 };
 
 inline
 XStatus::XStatus(const Code& code)
-	: _code (code)
+	: mCode (code)
 {
 }
 
 inline
 XStatus::operator bool() const
 {
-	return (_code == XStatus::OK);
+	return (mCode == XStatus::OK);
 }
 
 inline
-XStatus::operator Code() const
+XStatus::operator XStatus::Code() const
 {
-	return _code;
+	return mCode;
 }
 
 inline
 const char* XStatus::Message() const
 {
-	if (_code >= 0 && _code < ERROR_CODE_QTY) {
-		return CodeStrings[_code];
+	if (mCode >= 0 && mCode < ERROR_CODE_QTY) {
+		return CodeStrings[mCode];
 	} else {
 		return CodeStrings[UNKNOWN_ERROR];
 	}

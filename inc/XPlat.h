@@ -81,13 +81,13 @@
 #endif
 
 #ifndef GCC_SPECIFIC
-#	define GCC_SPECIFIC()
+#	define GCC_SPECIFIC(expr)
 #endif
 #ifndef MSVC_SPECIFIC
-#	define MSVC_SPECIFIC()
+#	define MSVC_SPECIFIC(expr)
 #endif
 #ifndef ICC_SPECIFIC
-#	define ICC_SPECIFIC()
+#	define ICC_SPECIFIC(expr)
 #endif
 
 /*********************************************************
@@ -369,9 +369,13 @@
 	#define X_LIKELY(x)       (x)
 	#define X_UNLIKELY(x)     (x)
 
-	#define strcasecmp stricmp
+	#define strcasecmp _stricmp
 	#define snprintf _snprintf
 	#define vsnprintf _vsnprintf
+
+#	include <winsock2.h>
+#	include <Ws2tcpip.h>
+#	include <ws2ipdef.h>
 
 #elif defined(COMPILER_GCC) | defined (COMPILER_ICC)
 
@@ -412,5 +416,7 @@
 #else
 #	error "Platform not supported"
 #endif
+
+#define X_UNUSED(x) (void)(x);
 
 #endif /* INCLUDED_XPLAT_PLATFORM_H */

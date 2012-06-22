@@ -8,7 +8,7 @@ class ThreadTS: public CxxTest::TestSuite
 	{
 		int Run()
 		{
-			while (val < 100) {
+			while (val < 10) {
 				XThread::SleepMs(1);
 				val++;
 			}
@@ -33,6 +33,6 @@ public:
 		ThreadForTesting1 test;
 		test.Start();
 		test.Wait();
-		TS_ASSERT(test.val == 100);
+		TS_ASSERT(test.val == 10);
 	}
 };

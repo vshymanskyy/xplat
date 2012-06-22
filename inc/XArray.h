@@ -9,12 +9,12 @@
 
 /// Represents a generic Array
 template <class T, unsigned SIZE = 0xFF>
-class Array {
+class XArray {
 
 public:
 	/// Array iterator
 	class It {
-		friend class Array<T, SIZE> ;
+		friend class XArray<T, SIZE> ;
 
 	private:
 		/// Index of element
@@ -59,12 +59,12 @@ public:
 	};
 
 	/// Constructor
-	Array() :
+	XArray() :
 		mCount(0) {
 	}
 
 	/// Destructor
-	~Array() {
+	~XArray() {
 	}
 
 	/// Returns the size of the list
@@ -105,7 +105,7 @@ public:
 	/// Appends an item to the back of the Array
 	/// @param item Item to append
 	void Append(const T& item) {
-		XASSERT(!IsFull());
+		X_ASSERT(!IsFull());
 		mData[mCount++] = item;
 	}
 
@@ -113,8 +113,8 @@ public:
 	/// @param index Position to insert at
 	/// @param item Item to insert
 	void InsertBefore(const It it, const T& item) {
-		XASSERT(!IsFull());
-		XASSERT(it.mIndex <= mCount);
+		X_ASSERT(!IsFull());
+		X_ASSERT(it.mIndex <= mCount);
 		for (unsigned i = mCount; i > it.mIndex; --i) {
 			mData[i] = mData[i - 1];
 		}
@@ -133,7 +133,7 @@ public:
 	/// Removes an item on a specified position
 	/// @param index Position to remove at
 	void Remove(const It it) {
-		XASSERT(it.mIndex < mCount);
+		X_ASSERT(it.mIndex < mCount);
 		for (unsigned i = it.mIndex + 1; i < mCount; ++i) {
 			mData[i - 1] = mData[i];
 		}
@@ -155,14 +155,14 @@ public:
 	/// @param it Iterator
 	/// @returns Constant item at iterator position
 	T& operator[](const It& it) {
-		XASSERT(it.mIndex < mCount);
+		X_ASSERT(it.mIndex < mCount);
 		return mData[it.mIndex];
 	}
 
 	/// @param it Iterator
 	/// @returns An item at iterator position
 	const T& operator[](const It& it) const {
-		XASSERT(it.mIndex < mCount);
+		X_ASSERT(it.mIndex < mCount);
 		return mData[it.mIndex];
 	}
 

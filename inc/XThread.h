@@ -6,6 +6,7 @@
 #endif
 
 #include "XPlat.h"
+#include "XString.h"
 
 #if defined (TARGET_OS_WINDOWS)
 #	include <windows.h>
@@ -34,7 +35,7 @@ public:
 	};
 
 public:
-	XThread();
+	XThread(const XString& name = "");
 
 	virtual ~XThread();
 
@@ -70,6 +71,7 @@ private:
 #elif defined (TARGET_OS_UNIX)
 	static void* _ThreadFunc(void* aPtr);
 	pthread_t mThread;
+	XString mName;
 #else
 #	error "Platform not supported"
 #endif

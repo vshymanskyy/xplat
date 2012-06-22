@@ -9,12 +9,12 @@
 
 /// Represents a generic Array
 template <class T>
-class ArrayExt {
+class XArrayExt {
 
 public:
 	/// Array iterator
 	class It {
-		friend class ArrayExt<T> ;
+		friend class XArrayExt<T> ;
 
 	private:
 		/// Index of element
@@ -59,7 +59,7 @@ public:
 	};
 
 	/// Constructor
-	ArrayExt()
+	XArrayExt()
 		: mCount	(0)
 		, mBuffSize	(2)
 	{
@@ -67,7 +67,7 @@ public:
 	}
 
 	/// Destructor
-	~ArrayExt() {
+	~XArrayExt() {
 		free(mData);
 	}
 
@@ -115,7 +115,7 @@ public:
 	/// @param item Item to insert
 	void InsertBefore(const It it, const T& item) {
 		Extend(1);
-		XASSERT(it.mIndex <= mCount);
+		X_ASSERT(it.mIndex <= mCount);
 		for (unsigned i = mCount; i > it.mIndex; --i) {
 			mData[i] = mData[i - 1];
 		}
@@ -134,7 +134,7 @@ public:
 	/// Removes an item on a specified position
 	/// @param index Position to remove at
 	void Remove(const It it) {
-		XASSERT(it.mIndex < mCount);
+		X_ASSERT(it.mIndex < mCount);
 		for (unsigned i = it.mIndex + 1; i < mCount; ++i) {
 			mData[i - 1] = mData[i];
 		}
@@ -157,14 +157,14 @@ public:
 	/// @param it Iterator
 	/// @returns Constant item at iterator position
 	T& operator[](const It& it) {
-		XASSERT(it.mIndex < mCount);
+		X_ASSERT(it.mIndex < mCount);
 		return mData[it.mIndex];
 	}
 
 	/// @param it Iterator
 	/// @returns An item at iterator position
 	const T& operator[](const It& it) const {
-		XASSERT(it.mIndex < mCount);
+		X_ASSERT(it.mIndex < mCount);
 		return mData[it.mIndex];
 	}
 

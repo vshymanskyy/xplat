@@ -13,7 +13,7 @@
 		return 0;
 	}
 
-	XThread::XThread()
+	XThread::XThread(const XString &name)
 		: mState (NOT_STARTED)
 		, mHandle (NULL)
 		, mId (0)
@@ -64,9 +64,10 @@
 		return NULL;
 	}
 
-	XThread::XThread()
+	XThread::XThread(const XString &name)
 		: mState(NOT_STARTED)
 		, mThread(0)
+		, mName(name)
 	{
 	}
 
@@ -85,7 +86,12 @@
 		mState = NOT_STARTED;
 
 		if (pthread_create(&mThread, NULL, _ThreadFunc, this) == 0) {
-			return (mThread != 0);
+			if (mThread) {
+				if (mName.Length()) {
+					pthread_setname_np(mThread, mName);
+				}
+				return true;
+			}
 		}
 		return false;
 	}

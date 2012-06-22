@@ -3,6 +3,7 @@
 
 #include <cxxtest/TestSuite.h>
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 class LogTS: public CxxTest::TestSuite
@@ -12,7 +13,7 @@ public:
 	struct VoidLogger : public XLogger {
 		VoidLogger() {}
 		virtual ~VoidLogger() {}
-		virtual void AddEntry(const XLog::Stream::Data* data) {}
+		virtual void AddEntry(const XLog::Stream::Data* data) { X_UNUSED(data); }
 	};
 
 	class LoggerForTesting : public XLogger {
@@ -42,15 +43,15 @@ public:
 		TS_ASSERT_SAME_DATA(tl.LastMsg(), "128 0x0085003C 3.14159265", tl.LastMsgLen());
 	}
 
-	/*void testLogBench1(void)
+	void LogBench1(void)
 	{
 		LoggerForTesting tl;
-		Log l("Test", Log::NORM, &tl);
-		TimeCounter tc;
+		XLog l("Test", XLog::NORM, &tl);
+		XTimeCounter tc;
 		for(int i=0; i<100000; i++) {
 			LOG(l, FMT("hello %s", "world "));
 		}
 		LOG(NULL, "100000 Normal prints:" << tc.Elapsed() << "ms, avg:" << double(tc.Elapsed())/100000 << "ms");
-	}*/
+	}
 
 };

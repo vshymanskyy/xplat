@@ -1,4 +1,5 @@
 #pragma once
+#include "XPlat.h"
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -10,7 +11,7 @@ class XLockStub {
 public:
 	XLockStub()		{}
 	~XLockStub()		{}
-	bool Lock(const uint32_t timeout = 0) { return true; }
+	bool Lock(const uint32_t timeout = 0) { X_UNUSED(timeout); return true; }
 	bool TryLock()	{ return true; }
 	void Unlock()	{}
 };
@@ -78,7 +79,7 @@ private:
 		pthread_mutex_t mLock;
 	};
 
-#elif defined (WIN32)
+#elif defined (TARGET_OS_WINDOWS)
 
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
@@ -92,12 +93,13 @@ private:
 			return true;
 		}
 		bool TryLock()	{ return TryEnterCriticalSection(&mLock); }
-		void Unlock()	{ LeaveCriticalSection(&mLock) }
+		void Unlock()	{ LeaveCriticalSection(&mLock); }
 
 	private:
-		pthread_mutex_t mLock;
+		CRITICAL_SECTION mLock;
 	};
 
+	typedef XMutexRecursive XMutex;
 #else
 #error "Platform not supported"
 #endif

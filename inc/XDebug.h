@@ -1,29 +1,39 @@
-#ifndef INC_XDEBUG_HPP
-#define INC_XDEBUG_HPP
-
-#ifndef __cplusplus
-#error "This C++ header was included in C file"
-#endif
+#ifndef INC_XDEBUG_H
+#define INC_XDEBUG_H
 
 #include <XPlat.h>
 
-#if defined(WIN32)
-	#define XDEBUG_BREAK() { DebugBreak(); }
+#include <stdio.h>
+
+
+#if defined DEBUG || defined _DEBUG
+#define X_DBG(expr) expr
 #else
-	#define XDEBUG_BREAK() { *(char*)(NULL) = 0xFF; } // SEGV!!!
+#define X_DBG(expr)
 #endif
 
-#define XDEBUG_PRINT_FAIL(...) // TODO
-
-#define XFATAL(msg) { XDEBUG_PRINT_FAIL("Fatal: " #msg " at %s:%d", CURR_FILE, CURR_LINE); XDEBUG_BREAK(); }
-
-#define XASSERT(expr) { if (!(expr)) { XDEBUG_PRINT_FAIL("Assertion '" #expr "' failed at %s:%d", CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
-#define XASSERT_EQ(expr, val, fmt) { if (!((expr) == (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " == " #val "' failed ( " fmt " != " fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
-#define XASSERT_NE(expr, val, fmt) { if (!((expr) != (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " != " #val "' failed ( " fmt " == " fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
-#define XASSERT_GT(expr, val, fmt) { if (!((expr) >  (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " > "  #val "' failed ( " fmt " <= " fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
-#define XASSERT_GE(expr, val, fmt) { if (!((expr) >= (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " >= " #val "' failed ( " fmt " < "  fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
-#define XASSERT_LT(expr, val, fmt) { if (!((expr) <  (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " < "  #val "' failed ( " fmt " >= " fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
-#define XASSERT_LE(expr, val, fmt) { if (!((expr) <= (val))) { XDEBUG_PRINT_FAIL("Assertion '" #expr " <= " #val "' failed ( " fmt " > "  fmt " ) at %s:%d", (expr), (val), CURR_FILE, CURR_LINE); XDEBUG_BREAK(); } }
+#if defined (TARGET_OS_WINDOWS)
+	#include <Windows.h>
+	#define X_DBG_BREAK() DebugBreak();
+#elif defined (TARGET_OS_UNIX)
+	#include <signal.h>
+	#define X_DBG_BREAK() raise(SIGTRAP);
+#else
+	#define X_DBG_BREAK() *(char*)(NULL) = 0xFF; // SEGV!!!
+#endif
 
 
-#endif // INC_XDEBUG_HPP
+
+#define X_DEBUG_PRINT_FAIL(...) { fprintf(stderr, __VA_ARGS__); X_DBG_BREAK(); }
+
+#define X_FATAL(msg) { X_DEBUG_PRINT_FAIL("Fatal: " #msg " at %s:%d", __FILE__, __LINE__); }
+
+#define X_ASSERT(expr) { if (!(expr)) { X_DEBUG_PRINT_FAIL("Assertion '" #expr "' failed at %s:%d", __FILE__, __LINE__); } }
+#define X_ASSERT_EQ(expr, val, fmt) { if (!((expr) == (val))) { X_DEBUG_PRINT_FAIL("Assertion '" #expr " == " #val "' failed ( " fmt " != " fmt " ) at %s:%d", (expr), (val), __FILE__, __LINE__); } }
+#define X_ASSERT_NE(expr, val, fmt) { if (!((expr) != (val))) { X_DEBUG_PRINT_FAIL("Assertion '" #expr " != " #val "' failed ( " fmt " == " fmt " ) at %s:%d", (expr), (val), __FILE__, __LINE__); } }
+#define X_ASSERT_GT(expr, val, fmt) { if (!((expr) >  (val))) { X_DEBUG_PRINT_FAIL("Assertion '" #expr " > "  #val "' failed ( " fmt " <= " fmt " ) at %s:%d", (expr), (val), __FILE__, __LINE__); } }
+#define X_ASSERT_GE(expr, val, fmt) { if (!((expr) >= (val))) { X_DEBUG_PRINT_FAIL("Assertion '" #expr " >= " #val "' failed ( " fmt " < "  fmt " ) at %s:%d", (expr), (val), __FILE__, __LINE__); } }
+#define X_ASSERT_LT(expr, val, fmt) { if (!((expr) <  (val))) { X_DEBUG_PRINT_FAIL("Assertion '" #expr " < "  #val "' failed ( " fmt " >= " fmt " ) at %s:%d", (expr), (val), __FILE__, __LINE__); } }
+#define X_ASSERT_LE(expr, val, fmt) { if (!((expr) <= (val))) { X_DEBUG_PRINT_FAIL("Assertion '" #expr " <= " #val "' failed ( " fmt " > "  fmt " ) at %s:%d", (expr), (val), __FILE__, __LINE__); } }
+
+#endif // INC_XDEBUG_H

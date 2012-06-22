@@ -130,6 +130,9 @@ public:
 		}
 
 		const Stream& operator << (const char* s) const {
+			if (!s) {
+				s = "<null>";
+			}
 			size_t len = strlen(s);
 			if (len > mData->GetQty())
 				len = mData->GetQty();

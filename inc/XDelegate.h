@@ -56,6 +56,7 @@
 #error "This C++ header was included in C file"
 #endif
 
+#include <XPlat.h>
 #include <memory.h>
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -9,9 +9,9 @@
 
 	#include <windows.h>
 
-	class TimeCounter {
+	class XTimeCounter {
 	public:
-		TimeCounter() {
+		XTimeCounter() {
 			QueryPerformanceFrequency(&mFreq);
 			QueryPerformanceCounter(&mStart);
 		}
@@ -37,9 +37,9 @@
 
 	#include <sys/time.h>
 
-	class TimeCounter {
+	class XTimeCounter {
 	public:
-		TimeCounter() {
+		XTimeCounter() {
 			gettimeofday(&mStart, NULL);
 		}
 

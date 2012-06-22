@@ -23,19 +23,19 @@ private:
 		Handler handler;
 	};
 
-	XList<Command> _commands;
+	XList<Command> mCommands;
 	char mBuffer[1024];
 	const char* mTitle;
 
-	int Help(int argc, char** argv) {
+	int Help(int, char**) {
 		printf("Available commands:\n");
-		for(XList<Command>::It it = _commands.First(); it != _commands.End(); ++it) {
-			printf(" %s\n", _commands[it].command);
+		for(XList<Command>::It it = mCommands.First(); it != mCommands.End(); ++it) {
+			printf(" %s\n", mCommands[it].command);
 		}
 		return 0;
 	}
 
-	int Exit(int argc, char** argv) {
+	int Exit(int, char**) {
 		Stop();
 		return 0;
 	}
@@ -53,7 +53,7 @@ public:
 
 	void RegisterCommand(const char* command, Handler handler) {
 		Command cmd = { command, handler };
-		_commands.Append(cmd);
+		mCommands.Append(cmd);
 	}
 
 	virtual int Run();

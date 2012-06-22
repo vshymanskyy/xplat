@@ -14,7 +14,7 @@ class XPoolAlloc {
 public:
 
 	void* operator new(size_t) {
-		XASSERT(entries);
+		X_ASSERT(entries);
 		return entries->Allocate();
 	}
 

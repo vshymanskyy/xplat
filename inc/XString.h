@@ -5,7 +5,8 @@
 #error "This C++ header was included in C file"
 #endif
 
-#include <stddef.h>
+#include <XPlat.h>
+#include <XDebug.h>
 
 /// An ANSI COW string, length is stored internally
 class XString
@@ -18,19 +19,22 @@ private:
 		unsigned length;
 		/// Count of references
 		int refcount;
+		/// Data buffer
+		char buffer[1];
 	};
+
+	static RefCountedData EMPTY;
 
 	/// Pointer to actual data
 	RefCountedData* mRefData;
 
-	char* GetBuffer() const {
-		return mRefData ? (char*)(mRefData+1) : NULL;
-	}
-
 	/// Compares data to another String
 	/// @param s String to compare
 	/// @return Difference
-	ptrdiff_t Compare(const XString& s)const;
+	ssize_t Compare(const XString& s)const;
+
+	/// @param s Length of the buffer
+	XString(size_t len);
 
 public:
 	/// Default constructor
@@ -59,25 +63,31 @@ public:
 	unsigned Length() const;
 
 	/// @param s The String to check against being prefix
-	bool StartsWith(const XString& s)const;
+	bool StartsWith(const XString& s) const;
 
 	/// @param s The String to check against being postfix
-	bool EndsWith(const XString& s)const;
+	bool EndsWith(const XString& s) const;
 
 	/// @param offset The offset of substring
 	/// @returns substring
-	XString Substring(int offset);
+	XString Substring(int offset) const;
 
 	/// @param offset The offset of substring
 	/// @param length The length of substring
 	/// @returns substring
-	XString Substring(int offset, int length);
+	XString Substring(int offset, unsigned length) const;
+
+	int	Find(const XString& s, int offset = 0) const;
 
 	/// Sets data to a new value
 	void Set(const XString& s);
 
 	/// @returns pointer to the constant data
-	operator const char*() const;
+	operator const char*() const { return mRefData->buffer; }
+
+	operator char*() { return mRefData->buffer; }
+
+	//operator bool() const { return Length() != 0; };
 
 	/// @param index the index of char
 	/// @returns reference to a char with the specified index
@@ -99,7 +109,7 @@ public:
 
 inline
 unsigned XString::Length() const{
-	return mRefData ? mRefData->length : 0;
+	return mRefData->length;
 }
 
 inline
@@ -108,52 +118,54 @@ XString operator+(const XString& s1, const XString& s2) {
 }
 
 inline
-XString::operator const char*() const
-{
-	return GetBuffer();
-}
-
-inline
 const char&
 XString::operator[](int index) const
 {
-	return (GetBuffer())[index];
+	if (index < 0) index += mRefData->length;
+	if (index < 0 || index >= (int)mRefData->length) return mRefData->buffer[mRefData->length];
+	return mRefData->buffer[index];
 }
 
+inline
+bool
+XString::operator==(const XString& s) const
+{
+	return Compare(s) == 0;
+}
 
 inline
 bool
 XString::operator!=(const XString& s) const
 {
-	return Compare(s)!=0;
+	return Compare(s) != 0;
 }
 
 inline
 bool
 XString::operator <(const XString& s) const
 {
-	return Compare(s) <0;
+	return Compare(s) < 0;
 }
 
 inline
 bool
 XString::operator >(const XString& s) const
 {
-	return Compare(s) >0;
+	return Compare(s) > 0;
 }
 
 inline
 bool
 XString::operator<=(const XString& s) const
 {
-	return Compare(s)<=0;
+	return Compare(s) <= 0;
 }
 
 inline
 bool
 XString::operator>=(const XString& s) const
 {
-	return Compare(s)>=0;
+	return Compare(s) >= 0;
 }
 
 #endif // INC_STRING_HPP

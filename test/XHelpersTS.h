@@ -38,9 +38,7 @@ public:
 	{
 		int q = 6;
 		int w = 2;
-		Swap(q, w);
-		TS_ASSERT(q==2);
-		TS_ASSERT(w==6);
+		TS_ASSERT((Swap(q, w), q==2 && w==6));
 	}
 
 	void testInRange()
@@ -65,9 +63,9 @@ public:
 
 	void testAbsDiff()
 	{
-		TS_ASSERT(AbsDiff(2, 3) == 1);
-		TS_ASSERT(AbsDiff(-5, 3) == 8);
-		TS_ASSERT(AbsDiff(-4, 50) == 54);
-		TS_ASSERT(AbsDiff(50, -4) == 54);
+		TS_ASSERT_EQUALS(AbsDiff(2, 3), 1);
+		TS_ASSERT_EQUALS(AbsDiff(-5, 3), 8);
+		TS_ASSERT_EQUALS(AbsDiff(-4, 50), 54);
+		TS_ASSERT_EQUALS(AbsDiff(50, -4), 54);
 	}
 };

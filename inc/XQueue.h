@@ -36,18 +36,18 @@ public:
 
 private:
 	/// Data buffer
-	T	_data[SIZE];
+	T	mData[SIZE];
 	/// Index of writer
-	int _inIdx;
+	int mInIdx;
 	/// Index of reader
-	int _outIdx;
+	int mOutIdx;
 };
 
 template<class T, unsigned SIZE>
 inline
 XQueue<T, SIZE>::XQueue()
-	: _inIdx(0)
-	, _outIdx(SIZE - 1)
+	: mInIdx(0)
+	, mOutIdx(SIZE - 1)
 {
 }
 
@@ -62,7 +62,7 @@ inline
 bool
 XQueue<T, SIZE>::IsEmpty() const
 {
-	return (((_outIdx+1)%SIZE) == _inIdx);
+	return (((mOutIdx+1)%SIZE) == mInIdx);
 }
 
 template<class T, unsigned SIZE>
@@ -70,8 +70,8 @@ inline
 void
 XQueue<T, SIZE>::Clear()
 {
-	_inIdx = 0;
-	_outIdx = SIZE - 1;
+	mInIdx = 0;
+	mOutIdx = SIZE - 1;
 }
 
 template<class T, unsigned SIZE>
@@ -79,9 +79,9 @@ inline
 void
 XQueue<T, SIZE>::Push(const T& info)
 {
-	_data[_inIdx] = info;
-	_inIdx = (_inIdx+1)%SIZE;
-	XASSERT_NE(_inIdx, _outIdx, "%d");		//overflow
+	mData[mInIdx] = info;
+	mInIdx = (mInIdx+1)%SIZE;
+	X_ASSERT_NE(mInIdx, mOutIdx, "%d");		//overflow
 }
 
 template<class T, unsigned SIZE>
@@ -89,9 +89,9 @@ inline
 T
 XQueue<T, SIZE>::Pop()
 {
-	_outIdx = (_outIdx+1)%SIZE;
-	XASSERT_NE(_outIdx, _inIdx, "%d");		//underflow
-	return _data[_outIdx];
+	mOutIdx = (mOutIdx+1)%SIZE;
+	X_ASSERT_NE(mOutIdx, mInIdx, "%d");		//underflow
+	return mData[mOutIdx];
 }
 
 template<class T, unsigned SIZE>
@@ -99,9 +99,9 @@ inline
 T
 XQueue<T, SIZE>::Peek()
 {
-	const int p = (_outIdx+1)%SIZE;
-	XASSERT_NE(p, _inIdx, "%d");			//underflow
-	return _data[p];
+	const int p = (mOutIdx+1)%SIZE;
+	X_ASSERT_NE(p, mInIdx, "%d");			//underflow
+	return mData[p];
 }
 
 #endif // INC_QUEUE_HPP

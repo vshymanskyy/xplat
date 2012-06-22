@@ -13,11 +13,11 @@
 #define SIZE_MIN ((size_t)0)
 #endif
 
-class BitArray
+class XBitArray
 {
 public:
-	BitArray(size_t n);
-	~BitArray();
+	XBitArray(size_t n);
+	~XBitArray();
 
 	void ClearAll();
 	void Set(size_t i);
@@ -37,48 +37,48 @@ private:
 #define BIT_FROM_INDEX(a)	(a * BITS_PER_ITEM)
 #define OFFSET_FROM_BIT(a)	(a % BITS_PER_ITEM)
 
-BitArray::BitArray(size_t n)
+XBitArray::XBitArray(size_t n)
 	: mSize(n)
 {
 	mData = new size_t[INDEX_FROM_BIT(mSize)];
 	ClearAll();
 }
 
-BitArray::~BitArray()
+XBitArray::~XBitArray()
 {
 	delete[] mData;
 }
 
 void
-BitArray::ClearAll()
+XBitArray::ClearAll()
 {
 	for (size_t i = 0; i < INDEX_FROM_BIT(mSize); i++)
-		mData[i] = SIZE_MIN;
+		mData[i] = 0;
 }
 
 void
-BitArray::Set(const size_t i)
+XBitArray::Set(const size_t i)
 {
-	XASSERT(i < mSize);
+	X_ASSERT(i < mSize);
 	mData[INDEX_FROM_BIT(i)] |= (0x1 << OFFSET_FROM_BIT(i));
 }
 
 void
-BitArray::Clear(const size_t i)
+XBitArray::Clear(const size_t i)
 {
-	XASSERT(i < mSize);
+	X_ASSERT(i < mSize);
 	mData[INDEX_FROM_BIT(i)] &= ~(0x1 << OFFSET_FROM_BIT(i));
 }
 
 bool
-BitArray::Test(const size_t i) const
+XBitArray::Test(const size_t i) const
 {
-	XASSERT(i < mSize);
+	X_ASSERT(i < mSize);
 	return (mData[INDEX_FROM_BIT(i)] & (0x1 << OFFSET_FROM_BIT(i)));
 }
 
 size_t
-BitArray::FindFirstClear() const
+XBitArray::FindFirstClear() const
 {
 	for (size_t i = 0; i < INDEX_FROM_BIT(mSize); i++) {
 		if (mData[i] != SIZE_MAX) {
@@ -93,10 +93,10 @@ BitArray::FindFirstClear() const
 }
 
 size_t
-BitArray::FindFirstSet() const
+XBitArray::FindFirstSet() const
 {
 	for (size_t i = 0; i < INDEX_FROM_BIT(mSize); i++) {
-		if (mData[i] != SIZE_MIN) {						// nothing set, exit early.
+		if (mData[i] != 0) {						// nothing set, exit early.
 			for (size_t j = 0; j < BITS_PER_ITEM; j++) {	// at least one bit is set here.
 				if (mData[i] & (1 << j)) {
 					return BIT_FROM_INDEX(i) + j;

@@ -7,11 +7,11 @@ int XShell::Run() {
 
 		if (fgets(mBuffer, 1024, stdin)) {
 			int argc = 0;
-			if(char** argv = CommandLineToArgv(mBuffer, &argc)) {
+			if (char** argv = CommandLineToArgv(mBuffer, &argc)) {
 				if(!argc) continue;
-				for(XList<Command>::It it = _commands.First(); it != _commands.End(); ++it) {
-					if(!strcasecmp(argv[0], _commands[it].command)) {
-						_commands[it].handler(argc, argv);
+				for(XList<Command>::It it = mCommands.First(); it != mCommands.End(); ++it) {
+					if(!strcasecmp(argv[0], mCommands[it].command)) {
+						mCommands[it].handler(argc, argv);
 						goto executed;
 					}
 				}

@@ -30,7 +30,7 @@ public:
 			}
 		}
 
-		TimeCounter mCounter;
+		XTimeCounter mCounter;
 		int mFired[FIRES_MAX];
 		int mFiredQty;
 		int mDriftMs;
@@ -41,7 +41,7 @@ public:
 		TestHandlerCancel()
 			: mFiredQty (0)
 		{
-			tc.SetTimer(10, 10, XTimerContext::Handler(this, &TestHandlerCancel::Callback));
+			tc.SetTimer(XTimerContext::Handler(this, &TestHandlerCancel::Callback), 10, 10);
 		}
 
 		void Callback() {
@@ -57,7 +57,7 @@ public:
 
 	void testSleep(void)
 	{
-		TimeCounter tc;
+		XTimeCounter tc;
 		XThread::SleepMs(27);
 		TS_ASSERT_DELTA(tc.Reset(), 27, TOLLERANCE);
 		XThread::SleepMs(58);
@@ -75,7 +75,7 @@ public:
 		XThread::SleepMs(50);
 
 		Test1 t;
-		tc.SetTimer(40, 0, XTimerContext::Handler(&t, &Test1::Callback));
+		tc.SetTimer(XTimerContext::Handler(&t, &Test1::Callback), 40, 0);
 		XThread::SleepMs(100);
 
 		TS_ASSERT_EQUALS(t.mFiredQty, 1);
@@ -86,13 +86,13 @@ public:
 	{
 		Test1 t1;
 		XTimerContext tc;
-		tc.SetTimer(120, 0, XTimerContext::Handler(&t1, &Test1::Callback));
+		tc.SetTimer(XTimerContext::Handler(&t1, &Test1::Callback), 120, 0);
 		XThread::SleepMs(120-TOLLERANCE);
 		tc.CancelTimer(XTimerContext::Handler(&t1, &Test1::Callback));
 		XThread::SleepMs(TOLLERANCE*2);
 		TS_ASSERT_EQUALS(t1.mFiredQty, 0);
 
-		tc.SetTimer(50, 50, XTimerContext::Handler(&t1, &Test1::Callback));
+		tc.SetTimer(XTimerContext::Handler(&t1, &Test1::Callback), 50, 50);
 		XThread::SleepMs(100+TOLLERANCE);
 		tc.CancelTimer(XTimerContext::Handler(&t1, &Test1::Callback));
 		XThread::SleepMs(70);
@@ -104,8 +104,8 @@ public:
 		Test1 t1;
 		Test1 t2;
 		XTimerContext tc;
-		tc.SetTimer(80, 0, XTimerContext::Handler(&t1, &Test1::Callback));
-		tc.SetTimer(50, 50, XTimerContext::Handler(&t2, &Test1::Callback));
+		tc.SetTimer(XTimerContext::Handler(&t1, &Test1::Callback), 80, 0);
+		tc.SetTimer(XTimerContext::Handler(&t2, &Test1::Callback), 50, 50);
 
 		XThread::SleepMs(60);
 		tc.CancelTimer(XTimerContext::Handler(&t2, &Test1::Callback));
@@ -129,10 +129,10 @@ public:
 		Test1 t1, t2, t3, t4;
 		{
 			XTimerContext tc;
-			tc.SetTimer(180, 0, XTimerContext::Handler(&t1, &Test1::Callback));
-			tc.SetTimer(50, 0, XTimerContext::Handler(&t2, &Test1::Callback));
-			tc.SetTimer(120, 0, XTimerContext::Handler(&t3, &Test1::Callback));
-			tc.SetTimer(210, 0, XTimerContext::Handler(&t4, &Test1::Callback));
+			tc.SetTimer(XTimerContext::Handler(&t1, &Test1::Callback), 180, 0);
+			tc.SetTimer(XTimerContext::Handler(&t2, &Test1::Callback), 50, 0);
+			tc.SetTimer(XTimerContext::Handler(&t3, &Test1::Callback), 120, 0);
+			tc.SetTimer(XTimerContext::Handler(&t4, &Test1::Callback), 210, 0);
 
 			XThread::SleepMs(220);
 		}
@@ -155,10 +155,10 @@ public:
 		Test1 t1, t2, t3, t4;
 		{
 			XTimerContext tc;
-			tc.SetTimer(60, 50, XTimerContext::Handler(&t1, &Test1::Callback));
-			tc.SetTimer(100, 100, XTimerContext::Handler(&t2, &Test1::Callback));
-			tc.SetTimer(25, 20, XTimerContext::Handler(&t3, &Test1::Callback));
-			tc.SetTimer(25, 20, XTimerContext::Handler(&t4, &Test1::Callback));
+			tc.SetTimer(XTimerContext::Handler(&t1, &Test1::Callback), 60, 50);
+			tc.SetTimer(XTimerContext::Handler(&t2, &Test1::Callback), 100, 100);
+			tc.SetTimer(XTimerContext::Handler(&t3, &Test1::Callback), 25, 20);
+			tc.SetTimer(XTimerContext::Handler(&t4, &Test1::Callback), 25, 20);
 
 			XThread::SleepMs(280);
 		}
@@ -191,7 +191,7 @@ public:
 		Test1 t1(25);
 		{
 			XTimerContext tc;
-			tc.SetTimer(30, 30, XTimerContext::Handler(&t1, &Test1::Callback));
+			tc.SetTimer(XTimerContext::Handler(&t1, &Test1::Callback), 30, 30);
 
 			XThread::SleepMs(100);
 		}
