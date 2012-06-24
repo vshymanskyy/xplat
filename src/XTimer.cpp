@@ -117,6 +117,7 @@
 			//FD_ZERO(&xcptSet);
 			//FD_SET(mPipe[0], &xcptSet);
 			const int qty = select(mPipe[0]+1, &readSet, NULL, NULL, &wait);
+			if (qty == -1 && errno == EINTR) continue;
 
 			if (qty == 0) {
 				// Timeout
@@ -138,7 +139,8 @@
 				while (read(mPipe[0], &buff, 16) == 16) {
 				}
 				continue;
-			} /*else if (qty == 1 && FD_ISSET(mPipe[0], &xcptSet)) {
+			}
+			/*else if (qty == 1 && FD_ISSET(mPipe[0], &xcptSet)) {
 				// Error
 				return 0;
 			}*/ else {

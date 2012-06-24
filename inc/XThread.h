@@ -40,7 +40,7 @@ public:
 
 	virtual ~XThread() {
 		if (Exists()) {
-			LOG(mLog, "Waiting for thread to exit...");
+			LOG_MORE(mLog, "Waiting for thread to exit...");
 			Stop();
 			Wait();
 			Close();

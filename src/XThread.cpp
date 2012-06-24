@@ -6,7 +6,7 @@
 	DWORD XThread::_ThreadFunc(LPVOID pvThread)
 	{
 		if (XThread* pThis = (XThread*)pvThread) {
-			LOG(pThis->mLog, "Thread started");
+			LOG_MORE(pThis->mLog, "Thread started");
 			pThis->mState = RUNNING;
 			pThis->Run();
 			pThis->mState = STOPPED;
@@ -54,6 +54,7 @@
 	void* XThread::_ThreadFunc(void* aPtr)
 	{
 		if (XThread* pThis = (XThread*) aPtr) {
+			LOG_MORE(pThis->mLog, "Thread started");
 			pThis->mTid = GetCurrentId();
 			pThis->mState = RUNNING;
 			pThis->Run();

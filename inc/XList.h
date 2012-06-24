@@ -117,10 +117,9 @@ public:
 
 public:
 	/// Constructor
-	XList()
-			: mCount(0)
-	{
-	}
+	XList() : mCount(0) { }
+
+	XList(const T& item, unsigned qty = 1);
 
 	/// Copy constructor
 	XList(const XList& lst);
@@ -235,6 +234,14 @@ public:
 	/// @param item Item to append
 	It Append(const T& item);
 
+	/// Appends another list
+	/// @param lst List to append
+	void Append(const XList<T>& lst) {
+		for (It it = lst.First(); it != lst.End(); ++it) {
+			Append(lst[it]);
+		}
+	}
+
 	/// Prepends an item to the front of the list
 	/// @param item Item to prepend
 	It Prepend(const T& item);
@@ -331,6 +338,15 @@ private:
 //*******************************************
 //  List
 //*******************************************
+
+template<class T>
+XList<T>::XList(const T& item, unsigned qty)
+		: mCount(0)
+{
+	for (unsigned i = 0; i < qty; ++i) {
+		Append(item);
+	}
+}
 
 template<class T>
 XList<T>::XList(const XList& lst)

@@ -54,14 +54,18 @@ public:
 	static XList<XSockAddr> Lookup(const XString& str);
 	static XList<XSockAddr> GetLocal();
 
-	XSockAddr() {}
+	XSockAddr() { memset (this, 0, sizeof(XSockAddr)); }
 	XSockAddr(const XString& str);
 
 	XString ToString() const;
 	XString Resolve() const;
 
 	sockaddr* SA() { return &sa; };
+	sockaddr_in* SA4() { return &sa_in; };
+	sockaddr_in6* SA6() { return &sa_in6; };
 	const sockaddr* SA() const { return &sa; }
+	const sockaddr_in* SA4() const { return &sa_in; };
+	const sockaddr_in6* SA6() const { return &sa_in6; };
 
 	bool IsLocal() const;
 	bool IsLoopback() const;
