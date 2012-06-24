@@ -4,6 +4,7 @@
 class ListTS: public CxxTest::TestSuite
 {
 public:
+
 	void testFirstAndLast(void)
 	{
 		XList<int> a;

@@ -1,4 +1,3 @@
-#include <XActBuffer.h>
 #include <XArray.h>
 #include <XArrayExt.h>
 #include <XBitArray.h>
@@ -26,3 +25,5 @@
 #include <XTimeCounter.h>
 #include <XTimer.h>
 
+#include <net/XSockAddr.h>
+#include <net/XSocketUdp.h>

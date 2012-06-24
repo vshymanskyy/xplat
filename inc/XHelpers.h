@@ -1,5 +1,5 @@
-#ifndef INC_HELPERS_HPP
-#define INC_HELPERS_HPP
+#ifndef _X_HELPERS_H_
+#define _X_HELPERS_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -88,6 +88,14 @@ template <typename T>
 T LinearMap(T x, T in_min, T in_max, T out_min, T out_max)
 {
 	return ClampRange((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min, out_min, out_max);
+}
+
+#include <time.h>
+
+inline
+void RandInit()
+{
+	srand ( time(NULL) );
 }
 
 inline

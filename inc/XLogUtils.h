@@ -1,11 +1,11 @@
-#ifndef INC_LOG_UTILS_HPP
-#define INC_LOG_UTILS_HPP
+#ifndef _X_LOG_UTILS_H_
+#define _X_LOG_UTILS_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
 #endif
 
-#include "XLog.h"
+#include <XLog.h>
 
 #include <ctype.h>
 
@@ -105,4 +105,4 @@ private:
 	const char* mName;
 };
 
-#endif // INC_LOG_UTILS_HPP
+#endif /* _X_LOG_UTILS_H_ */

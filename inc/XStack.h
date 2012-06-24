@@ -1,5 +1,5 @@
-#ifndef INC_STACK_HPP
-#define INC_STACK_HPP
+#ifndef _X_STACK_H_
+#define _X_STACK_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -100,4 +100,4 @@ XStack<T, SIZE>::Peek(T& item)
 	return true;
 }
 
-#endif // INC_STACK_HPP
+#endif /* _X_STACK_H_ */

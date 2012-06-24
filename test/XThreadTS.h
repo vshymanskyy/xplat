@@ -19,7 +19,8 @@ class ThreadTS: public CxxTest::TestSuite
 
 	public:
 		ThreadForTesting1()
-				: val(0)
+				: XThread ("ThreadForTesting1")
+				, val(0)
 		{
 		}
 
@@ -34,5 +35,28 @@ public:
 		test.Start();
 		test.Wait();
 		TS_ASSERT(test.val == 10);
+	}
+
+	void ThreadSuspend(void)
+	{
+		ThreadForTesting1 test;
+		test.Start();
+		XThread::SleepMs(5);
+		test.Suspend();
+		XThread::SleepMs(5);
+		TS_ASSERT(test.val == 5);
+		test.Resume();
+		test.Wait();
+		TS_ASSERT(test.val == 10);
+	}
+
+	void testThreadId(void)
+	{
+		TS_ASSERT(XThread::GetCurrentId() != 0);
+
+		ThreadForTesting1 test;
+		test.Start();
+		XThread::SleepMs(5);
+		TS_ASSERT(test.GetId() != 0);
 	}
 };

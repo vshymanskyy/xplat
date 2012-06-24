@@ -1,5 +1,5 @@
-#ifndef INC_STRING_HPP
-#define INC_STRING_HPP
+#ifndef _X_STRING_H_
+#define _X_STRING_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -168,5 +168,5 @@ XString::operator>=(const XString& s) const
 	return Compare(s) >= 0;
 }
 
-#endif // INC_STRING_HPP
+#endif /* _X_STRING_H_ */
 

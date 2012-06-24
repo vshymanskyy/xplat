@@ -1,5 +1,5 @@
-#ifndef CMD_SHELL_H_
-#define CMD_SHELL_H_
+#ifndef _X_CMD_SHELL_H_
+#define _X_CMD_SHELL_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -42,13 +42,15 @@ private:
 
 public:
 	XShell(const char* title)
-		: mTitle (title)
+		: XThread ("Shell")
+		, mTitle (title)
 	{
 		RegisterCommand("Help", Handler(this, &XShell::Help));
 		RegisterCommand("Exit", Handler(this, &XShell::Exit));
 	}
 
 	virtual ~XShell() {
+		// TODO: Wake thread
 	}
 
 	void RegisterCommand(const char* command, Handler handler) {
@@ -59,4 +61,4 @@ public:
 	virtual int Run();
 };
 
-#endif /* CMD_SHELL_H_ */
+#endif /* _X_CMD_SHELL_H_ */

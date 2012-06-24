@@ -1,5 +1,6 @@
 #include <XSerialTty.h>
 
+#ifdef TARGET_OS_UNIX
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -140,3 +141,5 @@ void XSerialTty::DumpStats() const
 	printf(" tx errors: %d\n", mStats.txErrors);
 	printf(" rx errors: %d\n", mStats.rxErrors);
 }
+
+#endif

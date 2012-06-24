@@ -9,11 +9,11 @@ public:
 	{
 		XSocketUdp sock1024;
 		// Bind
-		TS_ASSERT(sock1024.Bind(XSockAddr("0:1024")));
+		TS_ASSERT(sock1024.Bind(XSockAddr("127.0.0.1:1024")));
 		// Rebind same
-		TS_ASSERT(sock1024.Bind(XSockAddr("0:1024")));
+		TS_ASSERT(sock1024.Bind(XSockAddr("127.0.0.1:1024")));
 		// Try bind another
-		TS_ASSERT(!XSocketUdp().Bind(XSockAddr("0:1024")));
+		TS_ASSERT(!XSocketUdp().Bind(XSockAddr("127.0.0.1:1024")));
 
 		int i = 0;
 		XSocketUdp socks[30];

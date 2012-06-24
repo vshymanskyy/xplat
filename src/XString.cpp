@@ -23,7 +23,6 @@ XString::Format(const char* format, ...)
 		va_end(args);
 	}
 
-
 	XString buff(qty);
 	va_list args;
 	va_start(args, format);
@@ -39,7 +38,8 @@ XString::XString() {
 
 XString::XString(const char* s)
 {
-	if (const unsigned len = strlen(s)) {
+	const unsigned len = s?strlen(s):0;
+	if (len) {
 		mRefData = (RefCountedData*) malloc (len + sizeof(RefCountedData));
 		memcpy (mRefData->buffer, s, len+1);
 		mRefData->refcount = 1;
@@ -200,5 +200,3 @@ XString::Find(const XString& s, int offset) const
 		return -1;
 	}
 }
-
-

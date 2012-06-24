@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _X_LOCKS_H_
+#define _X_LOCKS_H_
+
 #include "XPlat.h"
 
 #ifndef __cplusplus
@@ -103,3 +105,5 @@ private:
 #else
 #error "Platform not supported"
 #endif
+
+#endif /* _X_LOCKS_H_ */

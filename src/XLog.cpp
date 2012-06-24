@@ -1,17 +1,34 @@
 #include "XLog.h"
 #include "XThread.h"
 
-void XLogger::AddEntry(const XLog::Stream::Data* data)
-{
-	//TODO: lock
-	const char* title = (data->mLog && data->mLog->GetName())?(data->mLog->GetName()):(data->mFunc);
-	printf("%4d %02d:%02d:%02d.%03d %s: %s\n", data->mTid,
-		data->mTime.hour,
-		data->mTime.minute,
-		data->mTime.second,
-		data->mTime.msecond,
-		title, data->mMsg);
-}
+#if defined TARGET_OS_WINDOWS
+	#include <Windows.h>
+	void XLogger::AddEntry(const XLog::Stream::Data* data)
+	{
+		//TODO: lock
+		const char* title = (data->mLog && data->mLog->GetName())?(data->mLog->GetName()):(data->mFunc);
+		const XString str = XString::Format("%4d %02d:%02d:%02d.%03d %s: %s\n", data->mTid,
+			data->mTime.hour,
+			data->mTime.minute,
+			data->mTime.second,
+			data->mTime.msecond,
+			title, data->mMsg);
+		OutputDebugString((const char*)str);
+	}
+#else
+	void XLogger::AddEntry(const XLog::Stream::Data* data)
+	{
+		//TODO: lock
+		const char* title = (data->mLog && data->mLog->GetName().Length())?((char*)data->mLog->GetName()):(data->mFunc);
+		fprintf(stderr, "%4d %02d:%02d:%02d.%03d %s: %s\n", data->mTid,
+			data->mTime.hour,
+			data->mTime.minute,
+			data->mTime.second,
+			data->mTime.msecond,
+			title, data->mMsg);
+	}
+#endif
+
 
 XLog::Stream::Data::Data(const XLog* log, XLog::Level level, const char* func, const char* file, int line)
 	: mFunc		(func)

@@ -1,8 +1,5 @@
-#pragma once
-
-#ifndef __cplusplus
-#error "This C++ header was included in C file"
-#endif
+#ifndef _X_TIME_H_
+#define _X_TIME_H_
 
 #include "XPlat.h"
 
@@ -33,3 +30,5 @@ typedef struct XPlatTimeZone
 } XPlatTimeZone_t;
 
 bool XPlatGetTime(XPlatDateTime_t *time, XPlatTimeZone_t *timezone);
+
+#endif /* _X_TIME_H_ */

@@ -1,11 +1,12 @@
-#ifndef INC_ARRAY_EXT_HPP
-#define INC_ARRAY_EXT_HPP
+#ifndef _X_ARRAY_EXT_H_
+#define _X_ARRAY_EXT_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
 #endif
 
 #include <XDebug.h>
+#include <stdlib.h>
 
 /// Represents a generic Array
 template <class T>
@@ -193,4 +194,4 @@ private:
 	T*			mData;
 };
 
-#endif // INC_ARRAY_EXT_HPP
+#endif /* _X_ARRAY_EXT_H_ */

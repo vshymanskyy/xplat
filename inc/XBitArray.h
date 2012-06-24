@@ -1,5 +1,5 @@
-#ifndef INC_BITARRAY_HPP
-#define INC_BITARRAY_HPP
+#ifndef _X_BITARRAY_H_
+#define _X_BITARRAY_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -112,4 +112,4 @@ XBitArray::FindFirstSet() const
 #undef BIT_FROM_INDEX
 #undef OFFSET_FROM_BIT
 
-#endif // INC_BITARRAY_HPP
+#endif /* _X_BITARRAY_H_ */

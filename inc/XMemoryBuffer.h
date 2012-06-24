@@ -1,5 +1,5 @@
-#ifndef MEMORYBUFFER_H_
-#define MEMORYBUFFER_H_
+#ifndef _X_MEMORY_BUFFER_H_
+#define _X_MEMORY_BUFFER_H_
 
 class XMemoryBuffer {
 public:
@@ -35,4 +35,4 @@ private:
 	char*	mBuffer;
 };
 
-#endif /* MEMORYBUFFER_H_ */
+#endif /* _X_MEMORY_BUFFER_H_ */

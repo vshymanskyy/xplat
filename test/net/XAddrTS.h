@@ -33,7 +33,7 @@ public:
 				"fff:ffff:0:ffff:ffff:ffff:ffff:ffff"				//Good address
 		};
 
-		for (unsigned i=0; i<COUNTOF(goodaddr); i++) {
+		for (unsigned i=0; i<X_COUNTOF(goodaddr); i++) {
 			XString addr = XSockAddr(goodaddr[i]).ToString();
 			if (addr != goodaddr[i]) {
 				TS_FAIL((char*)(goodaddr[i] + " - " + addr));
@@ -51,7 +51,7 @@ public:
 				 "A:10"											//invalid
 		};
 
-		for (unsigned i=0; i<COUNTOF(badaddr); i++) {
+		for (unsigned i=0; i<X_COUNTOF(badaddr); i++) {
 			XString addr = XSockAddr(badaddr[i]).ToString();
 			if (addr != XString()) {
 				TS_FAIL((char*)(badaddr[i] + " - " + addr));
@@ -63,6 +63,10 @@ public:
 	void testAltAddrString(void)
 	{
 		XString altaddr[] = {
+				//"",											"127.0.0.1",
+				//"[]",										"::1",
+				//":3000",									"127.0.0.1:3000",
+				//"[]:3000",									"[::1]:3000",
 				"2001:db8:85a3:0:0:8a2e:370:7334",			"2001:db8:85a3::8a2e:370:7334",	// doc, IPv6 for 555-1234
 				"0000:0000:0000:0000:0000:0000:0000:0000",	"::",
 				"0000:0000:0000::0000:0000",				"::",
@@ -75,7 +79,7 @@ public:
 		};
 
 
-		for (unsigned i=0; i<COUNTOF(altaddr); i+=2) {
+		for (unsigned i=0; i<X_COUNTOF(altaddr); i+=2) {
 			XString addr1 = XSockAddr(altaddr[i]).ToString();
 			XString addr2 = XSockAddr(altaddr[i+1]).ToString();
 			if (addr1 != addr2) {
@@ -97,7 +101,7 @@ public:
 		};
 
 
-		for (unsigned i=0; i<COUNTOF(addr); i+=2) {
+		for (unsigned i=0; i<X_COUNTOF(addr); i+=2) {
 			XString addr1 = XSockAddr(addr[i]).Resolve();
 			if (addr1 != addr[i+1]) {
 				TS_FAIL((char*)(addr1 + " - " + addr[i+1]));
@@ -108,6 +112,8 @@ public:
 	void testLocal(void)
 	{
 		XList<XSockAddr> addr = XSockAddr::GetLocal();
+		TS_ASSERT(addr.Count() > 0);
+		TS_ASSERT(addr.Count() < 20);
 		for (XList<XSockAddr>::It it = addr.First(); it != addr.End(); ++it) {
 			TS_TRACE((char*)(addr[it].ToString()));
 		}

@@ -1,5 +1,5 @@
-#ifndef INC_POOL_HPP
-#define INC_POOL_HPP
+#ifndef _X_POOL_H_
+#define _X_POOL_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -37,4 +37,4 @@ private:
     XStack<void*, QTY> mFree;
 };
 
-#endif // INC_POOL_HPP
+#endif /* _X_POOL_H_ */

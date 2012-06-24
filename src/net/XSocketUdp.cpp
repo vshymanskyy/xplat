@@ -28,7 +28,7 @@ bool XSocketUdp::Bind(const XSockAddr& addr)
 			printf("setsockopt for SO_EXCLUSIVEADDRUSE failed with error: %ld\n", WSAGetLastError());
 		}
 #endif
-		if (-1 != bind(mSocket, addr.SA(), sizeof(XSockAddr))) {
+		if (-1 != bind(mSocket, addr.SA(), addr.SA_LEN())) {
 			return true;
 		} else {
 			x_closesocket(mSocket);
@@ -83,11 +83,12 @@ bool XSocketUdp::Bind(unsigned port)
 	return false;
 }
 */
+
 XSockAddr XSocketUdp::GetBindAddr() const
 {
 	XSockAddr addr;
 	socklen_t l = sizeof(addr);
-	if (0 != getsockname(mSocket, addr.SA(), &l)) {
+	if (-1 != mSocket && 0 != getsockname(mSocket, addr.SA(), &l)) {
 		X_FATAL("cannot GetBindAddr");
 	}
 	return addr;
@@ -100,12 +101,12 @@ XSockAddr XSocketUdp::GetBindAddr() const
 	return result;
 }*/
 
-ssize_t XSocketUdp::SendTo(const void* data, size_t len, const XSockAddr& addr)
+ssize_t XSocketUdp::SendTo(const void* data, size_t len, const XSockAddr& addr) const
 {
-	return sendto(mSocket, (char*)data, len, 0, addr.SA(), sizeof(XSockAddr));
+	return sendto(mSocket, (char*)data, len, 0, addr.SA(), addr.SA_LEN());
 }
 
-ssize_t XSocketUdp::RecvFrom(void* data, size_t len, XSockAddr* addr)
+ssize_t XSocketUdp::RecvFrom(void* data, size_t len, XSockAddr* addr) const
 {
 	socklen_t fromLen = sizeof(XSockAddr);
 	return recvfrom(mSocket, (char*)data, len, 0, addr->SA(), &fromLen);

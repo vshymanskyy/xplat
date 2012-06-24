@@ -1,5 +1,5 @@
-#ifndef INC_LOG_HPP
-#define INC_LOG_HPP
+#ifndef _X_LOG_H_
+#define _X_LOG_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -12,6 +12,7 @@
 
 #include "XList.h"
 #include "XTime.h"
+#include "XString.h"
 
 #define __LOG_ENTRY_SIZE 1024
 
@@ -68,7 +69,7 @@ public:
 			unsigned DecRef() { return --mRef; }
 			void IncPos(int qty) { if (qty > 0) { mPos += qty; } }
 			char* GetPos() const { return mPos; }
-			unsigned GetQty() const { return mMsg+COUNTOF(mMsg)-mPos-1; }
+			unsigned GetQty() const { return mMsg+X_COUNTOF(mMsg)-mPos-1; }
 			unsigned GetMsgLen() const { return mPos-mMsg; }
 		public:
 			char mMsg[__LOG_ENTRY_SIZE];
@@ -164,16 +165,15 @@ public:
 
 	~XLog();
 
-	const char* GetName() const { return mName; }
-	void SetName(const char* name) { mName = name; }
+	XString GetName() const { return mName; }
+	void SetName(const XString& name) { mName = name; }
 	Level GetLevel() const { return mLevel; }
 	void SetLevel(const Level l) { mLevel = l; }
 
 private:
-	const char* mName;
+	XString mName;
 	Level mLevel;
 	XLogger* mLogger;
-	unsigned mPadding;
 };
 
 struct XLogger {
@@ -201,7 +201,7 @@ public:
 	void ShowLogs() const {
 		printf("Registered logs:\n");
 		for (XList<XLog*>::It i = mLogs.First(); i != mLogs.End(); ++i) {
-			printf(" %s\n", mLogs[i]->GetName());
+			printf(" %s\n", (char*)mLogs[i]->GetName());
 		}
 	}
 
@@ -232,7 +232,7 @@ private:
 
 inline
 XLog::XLog(const char* name, Level level, XLogger* logger)
-		: mName(name), mLevel(level), mLogger(logger), mPadding(0)
+		: mName(name), mLevel(level), mLogger(logger)
 {
 	XLogManager::Get().AddLog(this);
 }
@@ -243,4 +243,4 @@ XLog::~XLog()
 	XLogManager::Get().RemoveLog(this);
 }
 
-#endif // INC_LOG_HPP
+#endif /* _X_LOG_H_ */

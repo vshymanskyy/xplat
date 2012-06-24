@@ -1,11 +1,13 @@
-#ifndef PERFTIMER_H_
-#define PERFTIMER_H_
+#ifndef _X_TIME_COUNTER_H_
+#define _X_TIME_COUNTER_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
 #endif
 
-#if defined(WIN32)
+#include <XPlat.h>
+
+#if defined(TARGET_OS_WINDOWS)
 
 	#include <windows.h>
 
@@ -33,7 +35,7 @@
 		LARGE_INTEGER mFreq;
 	};
 
-#elif defined(__GNUC__)
+#elif defined(TARGET_OS_UNIX)
 
 	#include <sys/time.h>
 
@@ -66,7 +68,7 @@
 	};
 
 #else
-	#error "Platform not supported"
+#error "Platform not supported"
 #endif
 
-#endif /* PERFTIMER_H_ */
+#endif /* _X_TIME_COUNTER_H_ */

@@ -6,6 +6,7 @@
 	DWORD XThread::_ThreadFunc(LPVOID pvThread)
 	{
 		if (XThread* pThis = (XThread*)pvThread) {
+			LOG(pThis->mLog, "Thread started");
 			pThis->mState = RUNNING;
 			pThis->Run();
 			pThis->mState = STOPPED;
@@ -14,36 +15,32 @@
 	}
 
 	XThread::XThread(const XString &name)
-		: mState (NOT_STARTED)
-		, mHandle (NULL)
-		, mId (0)
+		: mState	(NOT_STARTED)
+		, mThread	(NULL)
+		, mId		(0)
+		, mLog		(name)
 	{
-	}
-
-	XThread::~XThread()
-	{
-		if(mHandle != NULL) {
-			CloseHandle(mHandle);
-		}
 	}
 
 	bool XThread::Start()
 	{
-		if(mHandle != NULL) {
+		if(mThread != NULL) {
 			return false;
 		}
 		mState = NOT_STARTED;
-		mHandle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)_ThreadFunc, this, 0, &mId);
-		return (mHandle != NULL);
+		mThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)_ThreadFunc, this, 0, &mId);
+		return (mThread != NULL);
 	}
 
-	unsigned XThread::GetId() { return GetThreadId(mHandle); }
+	unsigned XThread::GetId() { return GetThreadId(mThread); }
 
-	bool XThread::Wait() { return WaitForSingleObject(mHandle, INFINITE) == WAIT_OBJECT_0; }
+	bool XThread::Wait() { return WaitForSingleObject(mThread, INFINITE) == WAIT_OBJECT_0; }
 
-	void XThread::Suspend() { SuspendThread(mHandle); }
+	void XThread::Suspend() { SuspendThread(mThread); }
 
-	void XThread::Resume() { ResumeThread(mHandle); }
+	void XThread::Resume() { ResumeThread(mThread); }
+
+	void XThread::Close() { CloseHandle(mThread); }
 
 	void XThread::SleepMs(unsigned ms) { Sleep(ms); }
 
@@ -57,6 +54,7 @@
 	void* XThread::_ThreadFunc(void* aPtr)
 	{
 		if (XThread* pThis = (XThread*) aPtr) {
+			pThis->mTid = GetCurrentId();
 			pThis->mState = RUNNING;
 			pThis->Run();
 			pThis->mState = STOPPED;
@@ -65,17 +63,11 @@
 	}
 
 	XThread::XThread(const XString &name)
-		: mState(NOT_STARTED)
-		, mThread(0)
-		, mName(name)
+		: mLog		(name)
+		, mState	(NOT_STARTED)
+		, mThread	(0)
+		, mTid		(0)
 	{
-	}
-
-	XThread::~XThread()
-	{
-		if (mThread != 0) {
-			pthread_detach(mThread);
-		}
 	}
 
 	bool XThread::Start()
@@ -87,8 +79,8 @@
 
 		if (pthread_create(&mThread, NULL, _ThreadFunc, this) == 0) {
 			if (mThread) {
-				if (mName.Length()) {
-					pthread_setname_np(mThread, mName);
+				if (mLog.GetName()) {
+					pthread_setname_np(mThread, mLog.GetName());
 				}
 				return true;
 			}
@@ -96,20 +88,22 @@
 		return false;
 	}
 
-	/*unsigned Thread::GetId() {
-
-	}*/
-
-	bool XThread::Wait() {
-		return (pthread_join(mThread, NULL) == 0);
+	unsigned XThread::GetId() {
+		return mTid;
 	}
 
-	void XThread::Suspend() {
+	bool XThread::Wait() { return (pthread_join(mThread, NULL) == 0); }
 
+	void XThread::Suspend() {
+		//pthread_kill(mThread, SIGSTOP);
 	}
 
 	void XThread::Resume() {
+		//pthread_kill(mThread, SIGCONT);
+	}
 
+	void XThread::Close() {
+		pthread_detach(mThread);
 	}
 
 	void XThread::SleepMs(unsigned ms) {

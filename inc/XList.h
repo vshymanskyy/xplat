@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _X_LIST_H_
+#define _X_LIST_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -451,3 +452,5 @@ typename XList<T>::It XList<T>::FindBefore(const It& i, const T& item) const
 	}
 	return End();
 }
+
+#endif /* _X_LIST_ */

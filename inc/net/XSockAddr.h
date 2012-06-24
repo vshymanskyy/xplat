@@ -61,7 +61,20 @@ public:
 	XString Resolve() const;
 
 	sockaddr* SA() { return &sa; };
-	const sockaddr* SA() const { return &sa; };
+	const sockaddr* SA() const { return &sa; }
+
+	bool IsLocal() const;
+	bool IsLoopback() const;
+	bool IsMulticast() const;
+	bool IsAny() const;
+
+	const socklen_t SA_LEN() const {
+		switch (sa.sa_family) {
+		case AF_INET:	return sizeof(sa_in);
+		case AF_INET6:	return sizeof(sa_in6);
+		default:		return 0;
+		}
+	}
 
 	void Port (unsigned p) {
 		switch (sa.sa_family) {

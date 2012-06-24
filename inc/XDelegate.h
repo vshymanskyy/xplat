@@ -49,8 +49,8 @@
 //                * More optimal assignment,== and != operators for static function pointers.
 // 04-04-09 1.5.1 * Restructured by stealther. Removed namespace, renamed, DelegateN -> ImplDetails
 
-#ifndef INC_DELEGATE_HPP
-#define INC_DELEGATE_HPP
+#ifndef _X_DELEGATE_H_
+#define _X_DELEGATE_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -1977,7 +1977,7 @@ public:
 // clean up after ourselves...
 #undef FASTDLGT_RETTYPE
 
-#endif // INC_DELEGATE_HPP
+#endif /* _X_DELEGATE_H_ */
 
 /// @}
 

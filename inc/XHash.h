@@ -1,5 +1,5 @@
-#ifndef X_HASH_H_
-#define X_HASH_H_
+#ifndef _X_HASH_H_
+#define _X_HASH_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -26,4 +26,4 @@ public:
 
 };
 
-#endif /* X_HASH_H_ */
+#endif /* _X_HASH_H_ */

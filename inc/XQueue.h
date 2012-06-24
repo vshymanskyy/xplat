@@ -1,5 +1,5 @@
-#ifndef INC_QUEUE_HPP
-#define INC_QUEUE_HPP
+#ifndef _X_QUEUE_H_
+#define _X_QUEUE_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -104,4 +104,4 @@ XQueue<T, SIZE>::Peek()
 	return mData[p];
 }
 
-#endif // INC_QUEUE_HPP
+#endif /*_X_QUEUE_H_ */

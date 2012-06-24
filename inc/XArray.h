@@ -1,5 +1,5 @@
-#ifndef INC_ARRAY_HPP
-#define INC_ARRAY_HPP
+#ifndef _X_ARRAY_H_
+#define _X_ARRAY_H_
 
 #ifndef __cplusplus
 #error "This C++ header was included in C file"
@@ -173,4 +173,4 @@ private:
 	T mData[SIZE];
 };
 
-#endif // INC_ARRAY_HPP
+#endif /* _X_ARRAY_H_ */

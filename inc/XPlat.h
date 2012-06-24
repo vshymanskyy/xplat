@@ -1,5 +1,5 @@
-#ifndef INCLUDED_XPLAT_H
-#define INCLUDED_XPLAT_H
+#ifndef _X_PLAT_H_
+#define _X_PLAT_H_
 
 /* http://sourceforge.net/apps/mediawiki/predef/index.php */
 
@@ -10,13 +10,13 @@
 #define X_STRINGIFY(x) #x						/*  */
 #define X_STRINGIFY_DEF(x) X_STRINGIFY(x)		/* Makes string from value of define */
 
-#define BIT(val, i) ((size_t)(*(val)) & ((size_t)1 << (i)))
-#define OFFSETOF(type, member) ((size_t)&(((type*)0)->member))
-#define COUNTOF(arr) (sizeof(arr)/sizeof(arr[0]))
+#define X_BIT(val, i) ((size_t)(*(val)) & ((size_t)1 << (i)))
+#define X_OFFSETOF(type, member) ((size_t)&(((type*)0)->member))
+#define X_COUNTOF(arr) (sizeof(arr)/sizeof(arr[0]))
 
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-#define ABS(a) (((a) < 0) ? -(a) : (a))
+#define X_MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define X_MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define X_ABS(a) (((a) < 0) ? -(a) : (a))
 
 /*********************************************************
  * COMPILER DETECTION
@@ -419,4 +419,4 @@
 
 #define X_UNUSED(x) (void)(x);
 
-#endif /* INCLUDED_XPLAT_PLATFORM_H */
+#endif /* _X_PLAT_H_ */

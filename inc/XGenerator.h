@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _X_GENERATOR_H_
+#define _X_GENERATOR_H_
 
 // Generator/continuation for C++
 // Author: Andrew Fedoniouk @ terrainformatica.com
@@ -39,8 +40,8 @@ struct NAME										\
 
 /*****************************************
  * Example
- *****************************************/
-/*
+ *****************************************
+
 XGENERATOR(IntRange) {
 
 public:
@@ -63,15 +64,19 @@ private:
 private:
 	int _i;
 };
+
 */
 
 /*****************************************
  * Usage
- *****************************************/
-/*
+ *****************************************
+
 	IntRange gen(3, 10);
 	int n;
 	while(gen(n)) {
 		LOG("Generated", n);
 	}
+
 */
+
+#endif /* _X_GENERATOR_H_ */

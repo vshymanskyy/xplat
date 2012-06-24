@@ -1,5 +1,5 @@
-#ifndef SERIAL_TTY_H_
-#define SERIAL_TTY_H_
+#ifndef _X_SERIAL_TTY_H_
+#define _X_SERIAL_TTY_H_
 
 #include <XLog.h>
 #include <XSerial.h>
@@ -33,4 +33,4 @@ private:
 	} mStats;
 };
 
-#endif /* SERIAL_TTY_H_ */
+#endif /* _X_SERIAL_TTY_H_ */

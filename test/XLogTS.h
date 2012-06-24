@@ -13,7 +13,7 @@ public:
 	struct VoidLogger : public XLogger {
 		VoidLogger() {}
 		virtual ~VoidLogger() {}
-		virtual void AddEntry(const XLog::Stream::Data* data) { X_UNUSED(data); }
+		virtual void AddEntry(const XLog::Stream::Data*) { }
 	};
 
 	class LoggerForTesting : public XLogger {

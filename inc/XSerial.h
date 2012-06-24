@@ -1,5 +1,5 @@
-#ifndef SERIAL_H_
-#define SERIAL_H_
+#ifndef _X_SERIAL_H_
+#define _X_SERIAL_H_
 
 #include <stdio.h>
 
@@ -40,4 +40,4 @@ struct ISerial {
 	virtual void Close() = 0;
 };
 
-#endif /* SERIAL_H_ */
+#endif /* _X_SERIAL_H_ */

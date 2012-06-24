@@ -143,7 +143,7 @@
 				return 0;
 			}*/ else {
 				// Error
-				X_ASSERT(false);
+				X_FATAL("select: %d(%s)", errno, strerror(errno));
 			}
 		}
 		return 0;
