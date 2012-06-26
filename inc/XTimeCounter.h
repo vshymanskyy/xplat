@@ -24,7 +24,7 @@
 			return ((mStart.QuadPart-prev.QuadPart)*1000)/mFreq.QuadPart;
 		}
 
-		int Elapsed() {
+		int Elapsed() const {
 			LARGE_INTEGER curr;
 			QueryPerformanceCounter(&curr);
 			return ((curr.QuadPart-mStart.QuadPart)*1000)/mFreq.QuadPart;
@@ -51,7 +51,7 @@
 			return timevaldiff(mStart, prev);
 		}
 
-		int Elapsed() {
+		int Elapsed() const {
 			timeval curr;
 			gettimeofday(&curr, NULL);
 			return timevaldiff(curr, mStart);

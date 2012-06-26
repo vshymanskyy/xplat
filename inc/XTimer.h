@@ -119,7 +119,7 @@ public:
 		mLock.Lock();
 		mTimers.Append(entry);
 
-		// Set a timer to call the timer routine in 10 seconds.
+		// Set a timer to call the timer routine
 		ULONG flags = WT_EXECUTEINTIMERTHREAD;
 		if (repeat == 0)
 			flags |= WT_EXECUTEONLYONCE;

@@ -30,23 +30,14 @@ private:
 
 #if defined(__GNUC__)
 
-	#include <pthread.h>
 	#include <time.h>
+	#include <pthread.h>
 
 	class XMutex {
 	public:
 		XMutex()		{ pthread_mutex_init(&mLock, NULL); }
 		~XMutex()		{ pthread_mutex_destroy(&mLock); }
-		bool Lock(const uint32_t timeout = 0) {
-			if (timeout) {
-                struct timespec abs_time;
-                clock_gettime(CLOCK_REALTIME, &abs_time);
-                abs_time.tv_sec += timeout;
-				return (pthread_mutex_timedlock(&mLock, &abs_time) == 0);
-			} else {
-				return (pthread_mutex_lock(&mLock) == 0);
-			}
-		}
+		bool Lock()		{ return (pthread_mutex_lock(&mLock) == 0); }
 		bool TryLock()	{ return (pthread_mutex_trylock(&mLock) == 0); }
 		void Unlock()	{ pthread_mutex_unlock(&mLock); }
 
@@ -64,16 +55,7 @@ private:
 			pthread_mutexattr_destroy(&attr);
 		}
 		~XMutexRecursive() { pthread_mutex_destroy(&mLock); }
-		bool Lock(const uint32_t timeout = 0) {
-			if (timeout) {
-				timespec ts;
-			    ts.tv_sec = (timeout / 1000);
-			    ts.tv_nsec = ((timeout % 1000) * 1000000);
-				return (pthread_mutex_timedlock(&mLock, &ts) == 0);
-			} else {
-				return (pthread_mutex_lock(&mLock) == 0);
-			}
-		}
+		bool Lock()		{ return (pthread_mutex_lock(&mLock) == 0); }
 		bool TryLock()	{ return (pthread_mutex_trylock(&mLock) == 0); }
 		void Unlock()	{ pthread_mutex_unlock(&mLock); }
 
@@ -90,10 +72,7 @@ private:
 	public:
 		XMutexRecursive()	{ InitializeCriticalSection(&mLock); }
 		~XMutexRecursive()	{ DeleteCriticalSection(&mLock); }
-		bool Lock(const uint32_t timeout = 0) {
-			EnterCriticalSection(&mLock);
-			return true;
-		}
+		bool Lock()			{ EnterCriticalSection(&mLock); return true; }
 		bool TryLock()	{ return TryEnterCriticalSection(&mLock); }
 		void Unlock()	{ LeaveCriticalSection(&mLock); }
 

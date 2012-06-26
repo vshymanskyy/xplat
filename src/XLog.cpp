@@ -20,7 +20,7 @@
 	{
 		//TODO: lock
 		const char* title = (data->mLog && data->mLog->GetName().Length())?((char*)data->mLog->GetName()):(data->mFunc);
-		fprintf(stderr, "%4d %02d:%02d:%02d.%03d %s: %s\n", data->mTid,
+		fprintf((data->mLevel < XLog::WARN)?stderr:stdout, "%4d %02d:%02d:%02d.%03d %s: %s\n", data->mTid,
 			data->mTime.hour,
 			data->mTime.minute,
 			data->mTime.second,

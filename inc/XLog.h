@@ -10,15 +10,17 @@
 #include <stdarg.h>
 #include <string.h>
 
-#include "XList.h"
-#include "XTime.h"
-#include "XString.h"
+#include <XList.h>
+#include <XTime.h>
+#include <XString.h>
+#include <XString.h>
+#include <XLocks.h>
 
 #define __LOG_ENTRY_SIZE 1024
 
 //#define LOG_STR(val) STRINGIFY(val)
 //#define LOG_VAL(val) "(" LOG_STR(val) ")" << " = " << (val)
-//#define LOG_LEVEL_MAX Log::WARN
+//#define LOG_LEVEL_MAX XLog::WARN
 
 #ifdef LOG_LEVEL_MAX
 #define __LOG(log, level, ...) { const XLog& __l = log; if (LOG_LEVEL_MAX >= level && __l.GetLevel() >= level) { XLog::Stream logTrace(&__l, level, __FUNCTION__, __FILE__, __LINE__); logTrace << __VA_ARGS__; } }
@@ -103,7 +105,7 @@ public:
 
 		#define __LOG_APPEND(fmt, ...) { mData->IncPos(snprintf(mData->GetPos(), mData->GetQty(), (fmt), __VA_ARGS__)); }
 
-		const Stream& operator << (bool v) const                { return (*this) << (v?"true":"false"); }
+		const Stream& operator << (bool v) const                { return (*this) << (v?"true ":"false "); }
 		const Stream& operator << (const void* v) const         { __LOG_APPEND("%p ", v) return *this; }
 
 		const Stream& operator << (short v) const               { __LOG_APPEND("%hi ", v) return *this; }
@@ -139,6 +141,8 @@ public:
 				len = mData->GetQty();
 			memcpy(mData->GetPos(), s, len);
 			mData->IncPos(len);
+			*mData->GetPos() = ' ';
+			mData->IncPos(1);
 			return *this;
 		}
 
@@ -217,17 +221,22 @@ private:
 	}
 
 	void AddLog(XLog* log) {
+		mLock.Lock();
 		mLogs.Append(log);
+		mLock.Unlock();
 	}
 
 	void RemoveLog(XLog* log) {
+		mLock.Lock();
 		XList<XLog*>::It node = mLogs.FindAfter(mLogs.First(), log);
 		mLogs.Remove(node);
+		mLock.Unlock();
 	}
 
 private:
 	XLogger* mDefaultLogger;
 	XList<XLog*> mLogs;
+	XMutex mLock;
 };
 
 inline
