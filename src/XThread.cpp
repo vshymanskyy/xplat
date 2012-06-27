@@ -78,14 +78,21 @@
 		}
 		mState = NOT_STARTED;
 
-		if (pthread_create(&mThread, NULL, _ThreadFunc, this) == 0) {
+		pthread_attr_t attr;
+		pthread_attr_init(&attr);
+		pthread_attr_setstacksize(&attr, 32768);
+		if (0 == pthread_create(&mThread, &attr, _ThreadFunc, this)) {
 			if (mThread) {
 				if (mLog.GetName()) {
 					pthread_setname_np(mThread, mLog.GetName());
 				}
 				return true;
 			}
+		} else {
+			LOG_CRIT(mLog, "Could not start thread (" << errno << "):" << strerror(errno) );
 		}
+		pthread_attr_destroy(&attr);
+
 		return false;
 	}
 
