@@ -13,9 +13,9 @@ class XLockStub {
 public:
 	XLockStub()		{}
 	~XLockStub()		{}
-	bool Lock(const uint32_t timeout = 0) { X_UNUSED(timeout); return true; }
-	bool TryLock()	{ return true; }
-	void Unlock()	{}
+	bool Lock()		{ return true; }
+	bool TryLock()		{ return true; }
+	void Unlock()		{}
 };
 
 template < class LOCK >
