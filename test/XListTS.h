@@ -250,7 +250,7 @@ public:
 		}
 	}
 
-	class __TestListCRTP: public XList<__TestListCRTP> {
+class __TestListCRTP: public XList<__TestListCRTP> {
 private:
 	int _data;
 };

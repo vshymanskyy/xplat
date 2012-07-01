@@ -119,7 +119,7 @@ public:
 	/// Constructor
 	XList() : mCount(0) { }
 
-	XList(const T& item, unsigned qty = 1);
+	XList(const T& item, unsigned qty);
 
 	/// Copy constructor
 	XList(const XList& lst);

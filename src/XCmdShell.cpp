@@ -19,6 +19,8 @@ int XShell::Run() {
 executed:
 				free(argv);
 			}
+		} else {
+			break;
 		}
 	}
 	return 0;

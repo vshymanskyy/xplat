@@ -7,11 +7,15 @@ class CompilerRvoTS: public CxxTest::TestSuite
 	struct RvoTest {
 		uint8_t buffer[1024];
 		RvoTest() { memset(buffer, 0xFA, sizeof(buffer)); }
-		RvoTest(const RvoTest& t)
-		{ TS_TRACE("RVO not optimal: Copy detected"); memcpy(buffer,t.buffer, sizeof(t.buffer)); }
+		RvoTest(const RvoTest& t) {
+			TS_TRACE("RVO not optimal: Copy detected");
+			memcpy(buffer,t.buffer, sizeof(buffer));
+		}
 
-		RvoTest& operator = (const RvoTest& t)
-		{ TS_TRACE("RVO not optimal: Assignment detected"); memcpy(buffer,t.buffer, sizeof(t.buffer)); return *this; }
+		RvoTest& operator = (const RvoTest& t) {
+			TS_TRACE("RVO not optimal: Assignment detected");
+			memcpy(buffer,t.buffer, sizeof(buffer)); return *this;
+		}
 	};
 
 	RvoTest RvoTestFun2() {
@@ -35,8 +39,8 @@ public:
 	{
 		RvoTest t1 = RvoTestFun();
 		RvoTest t2(RvoTestFun());
-		TS_ASSERT(t1.buffer[RandRange(0, 1023)] == 0xFA);
-		TS_ASSERT(t2.buffer[RandRange(0, 1023)] == 0xFA);
+		TS_ASSERT_EQUALS(t1.buffer[RandRange(0, 1023)], 0xFA);
+		TS_ASSERT_EQUALS(t2.buffer[RandRange(0, 1023)], 0xFA);
 	}
 
 };

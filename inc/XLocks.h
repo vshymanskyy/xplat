@@ -73,7 +73,7 @@ private:
 		XMutexRecursive()	{ InitializeCriticalSection(&mLock); }
 		~XMutexRecursive()	{ DeleteCriticalSection(&mLock); }
 		bool Lock()			{ EnterCriticalSection(&mLock); return true; }
-		bool TryLock()	{ return TryEnterCriticalSection(&mLock); }
+		bool TryLock()	{ return 0 == TryEnterCriticalSection(&mLock); }
 		void Unlock()	{ LeaveCriticalSection(&mLock); }
 
 	private:
