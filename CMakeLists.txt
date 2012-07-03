@@ -7,7 +7,7 @@ file(GLOB_RECURSE xplat_tests ${PROJECT_SOURCE_DIR}/test/*.h)
 
 add_custom_command (
 	OUTPUT ${CMAKE_BINARY_DIR}/xplat_test.cpp
-	COMMAND python ${PROJECT_SOURCE_DIR}/../cxxtest/bin/cxxtestgen --xunit-printer -o ${CMAKE_BINARY_DIR}/xplat_test.cpp ${xplat_tests}
+	COMMAND python -B ${PROJECT_SOURCE_DIR}/../cxxtest/bin/cxxtestgen --xunit-printer -o ${CMAKE_BINARY_DIR}/xplat_test.cpp ${xplat_tests}
 )
 
 find_package (Threads)
