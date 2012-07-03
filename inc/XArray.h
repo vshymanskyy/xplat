@@ -109,6 +109,15 @@ public:
 		mData[mCount++] = item;
 	}
 
+	/// Appends an item to the back of the Array
+	/// @param item Item to append
+	template<typename Iterable>
+	void Append(const Iterable& list) {
+		for (typename Iterable::It it = list.First(); it != list.End(); ++it) {
+			Append(list[it]);
+		}
+	}
+
 	/// Inserts an item on a specified position
 	/// @param index Position to insert at
 	/// @param item Item to insert
