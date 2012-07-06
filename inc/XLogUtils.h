@@ -9,6 +9,27 @@
 
 #include <ctype.h>
 
+class XFileLogger: public XLogger
+{
+public:
+	XFileLogger(const char* fn) { mFile = fopen(fn, "a+"); if (!mFile) { X_FATAL("Cannot open file: %s", fn); } }
+	virtual ~XFileLogger() { fclose(mFile); }
+
+	virtual void AddEntry(const XLog::Stream::Data* data) {
+		fprintf(mFile, "%4d %02d:%02d:%02d.%03d %s: %s\n", data->mTid,
+			data->mTime.hour,
+			data->mTime.minute,
+			data->mTime.second,
+			data->mTime.msecond,
+			(data->mLog && data->mLog->GetName().Length())?
+			((char*)data->mLog->GetName()):(data->mFunc),
+			data->mMsg);
+		fflush(mFile);
+	}
+private:
+	FILE* mFile;
+};
+
 class XMultiLogger: public XLogger, public XList<XLogger*>
 {
 public:

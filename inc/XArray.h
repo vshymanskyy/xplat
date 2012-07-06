@@ -18,7 +18,7 @@ public:
 
 	private:
 		/// Index of element
-		unsigned mIndex;
+		unsigned		mIndex;
 
 	public:
 		/// Constructor
@@ -58,14 +58,13 @@ public:
 		It operator -(int i) { return It(mIndex - i); }
 	};
 
+
+
 	/// Constructor
-	XArray() :
-		mCount(0) {
-	}
+	XArray() : mCount(0) { }
 
 	/// Destructor
-	~XArray() {
-	}
+	~XArray() { }
 
 	/// Returns the size of the list
 	int Count() const {

@@ -159,7 +159,7 @@
 	}
 
 	unsigned XThread::GetCurrentId() {
-		return syscall(SYS_gettid);
+		return (unsigned)syscall(SYS_gettid);
 	}
 
 #else
