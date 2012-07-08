@@ -6,13 +6,25 @@
 #endif
 
 #include <XLog.h>
-
+#include <XThread.h>
 #include <ctype.h>
 
 class XFileLogger: public XLogger
 {
 public:
-	XFileLogger(const char* fn) { mFile = fopen(fn, "a+"); if (!mFile) { X_FATAL("Cannot open file: %s", fn); } }
+	XFileLogger(const char* fn) {
+		if ((mFile = fopen(fn, "a+"))) {
+			XPlatDateTime t;
+			XPlatGetTime(&t, NULL);
+
+			fprintf(mFile, "#######################################################\n");
+			fprintf(mFile, " Log from (tid: %d, build: %s %s)\n", XThread::GetCurrentId(), __DATE__, __TIME__);
+			fprintf(mFile, "#######################################################\n");
+		} else {
+			X_FATAL("Cannot open file: %s", fn);
+		}
+
+	}
 	virtual ~XFileLogger() { fclose(mFile); }
 
 	virtual void AddEntry(const XLog::Stream::Data* data) {
