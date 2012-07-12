@@ -23,9 +23,11 @@ public:
 	XTimerContext()
 		: mWaiting(mTimers.End())
 	{
-		if (pipe(mPipe) == -1) {
-			X_ASSERT(false);
+		if (0 != pipe(mPipe)) {
+			X_FATAL("Could not initialize pipe (%d) %s", errno, strerror(errno));
 		}
+		X_ASSERT(mPipe[0]);
+		X_ASSERT(mPipe[1]);
 
 		Start();
 	}
@@ -83,6 +85,8 @@ private:
 	XList<TimerEntry>::It mWaiting;
 	int					mPipe[2];
 	XMutexRecursive		mLock;
+	fd_set				mReadSet;
+	//fd_set			mXcptSet;
 };
 
 #elif defined (TARGET_OS_WINDOWS)

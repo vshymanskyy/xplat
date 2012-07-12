@@ -70,17 +70,30 @@ public:
 
 	void testTimer(void)
 	{
-
 		XTimerContext tc;
 		XThread::SleepMs(50);
 
 		Test1 t;
 		tc.SetTimer(XTimerContext::Handler(&t, &Test1::Callback), 40);
 
-		XThread::SleepMs(100);
+		XThread::SleepMs(60);
 
 		TS_ASSERT_EQUALS(t.mFiredQty, 1);
 		TS_ASSERT_DELTA(t.mFired[0], 40, TOLLERANCE);
+	}
+
+	void testTimer0(void)
+	{
+		XTimerContext tc;
+		XThread::SleepMs(50);
+
+		Test1 t;
+		tc.SetTimer(XTimerContext::Handler(&t, &Test1::Callback), 0);
+
+		XThread::SleepMs(10);
+
+		TS_ASSERT_EQUALS(t.mFiredQty, 1);
+		TS_ASSERT_DELTA(t.mFired[0], 0, TOLLERANCE);
 	}
 
 	void testTimerCancel(void)

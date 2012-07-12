@@ -54,4 +54,12 @@ public:
 		LOG(NULL, "100000 Normal prints:" << tc.Elapsed() << "ms, avg:" << double(tc.Elapsed())/100000 << "ms");
 	}
 
+	void testLogDump(void)
+	{
+		//Log l("Dump Test");
+		//char buffer[100];
+		//LOG(l, LogDump(buffer, sizeof(buffer)));
+	}
+
+
 };

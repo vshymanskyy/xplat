@@ -73,8 +73,6 @@
 
 	int XTimerContext::Run() {
 		timeval now, wait;
-		fd_set readSet;
-		//fd_set xcptSet;
 
 		while (!IsStopping()) {
 			gettimeofday(&now, NULL);
@@ -91,12 +89,12 @@
 			if (mWaiting == mTimers.End()) {
 				// Wait until waked
 				mLock.Unlock();
-				FD_ZERO(&readSet);
-				FD_SET(mPipe[0], &readSet);
+				FD_ZERO(&mReadSet);
+				FD_SET(mPipe[0], &mReadSet);
 				//FD_ZERO(&xcptSet);
 				//FD_SET(mPipe[0], &xcptSet);
-				const int qty = select(mPipe[0]+1, &readSet, NULL, NULL, NULL);
-				if (qty == 1 && FD_ISSET(mPipe[0], &readSet)) {
+				const int qty = select(mPipe[0]+1, &mReadSet, NULL, NULL, NULL);
+				if (qty == 1 && FD_ISSET(mPipe[0], &mReadSet)) {
 					// Waked, clear pipe
 					char buff[16];
 					while (read(mPipe[0], &buff, 16) == 16) {
@@ -108,15 +106,17 @@
 				continue;
 			}
 
-			TimevalSub(mTimers[mWaiting].mExpires, now, &wait);
+			if (0 != TimevalSub(mTimers[mWaiting].mExpires, now, &wait)) {
+				memset(&wait, 0, sizeof(wait));
+			}
 
 			mLock.Unlock();
 
-			FD_ZERO(&readSet);
-			FD_SET(mPipe[0], &readSet);
+			FD_ZERO(&mReadSet);
+			FD_SET(mPipe[0], &mReadSet);
 			//FD_ZERO(&xcptSet);
 			//FD_SET(mPipe[0], &xcptSet);
-			const int qty = select(mPipe[0]+1, &readSet, NULL, NULL, &wait);
+			const int qty = select(mPipe[0]+1, &mReadSet, NULL, NULL, &wait);
 			if (qty == -1 && errno == EINTR) continue;
 
 			if (qty == 0) {
@@ -133,7 +133,7 @@
 					}
 				}
 				mLock.Unlock();
-			} else if (qty == 1 && FD_ISSET(mPipe[0], &readSet)) {
+			} else if (qty == 1 && FD_ISSET(mPipe[0], &mReadSet)) {
 				// Waked, clear pipe
 				char buff[16];
 				while (read(mPipe[0], &buff, 16) == 16) {
