@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-class XShell : public XThread {
+class XShell : private XThread {
 
 public:
 	typedef XDelegate< int (int argc, char** argv) > Handler;
@@ -23,10 +23,7 @@ private:
 		Handler handler;
 	};
 
-	XList<Command> mCommands;
-	char mBuffer[1024];
-	const char* mTitle;
-
+private:
 	int Help(int, char**) {
 		printf("Available commands:\n");
 		for(XList<Command>::It it = mCommands.First(); it != mCommands.End(); ++it) {
@@ -42,8 +39,7 @@ private:
 
 public:
 	XShell(const char* title)
-		: XThread ("Shell")
-		, mTitle (title)
+		: XThread	(title)
 	{
 		RegisterCommand("Help", Handler(this, &XShell::Help));
 		RegisterCommand("Exit", Handler(this, &XShell::Exit));
@@ -59,6 +55,10 @@ public:
 	}
 
 	virtual int Run();
+
+private:
+	XList<Command> mCommands;
+	char mBuffer[1024];
 };
 
 #endif /* _X_CMD_SHELL_H_ */
