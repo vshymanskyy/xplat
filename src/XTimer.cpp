@@ -57,14 +57,14 @@
 	    return 0;
 	}
 
-	void XTimerContext::SetTimer(Handler h, uint32_t ms, uint32_t repeat)
+	void XTimerContext::SetTimer(Handler h, uint32_t ms, uint32_t repeat, void* arg)
 	{
 		TimerEntry entry;
 		gettimeofday(&entry.mExpires, NULL);
 		TimevalAddMs(&entry.mExpires, ms);
 		entry.mPeriod = repeat;
 		entry.mHandler = h;
-
+		entry.mArg = arg;
 		mLock.Lock();
 		mTimers.Append(entry);
 		Wake();
@@ -123,10 +123,11 @@
 				// Timeout
 				mLock.Lock();
 				if (mWaiting != mTimers.End()) { // The entry may be deleted during sleep
-					mTimers[mWaiting].mHandler();
+					TimerEntry& tmr = mTimers[mWaiting];
+					tmr.mHandler(tmr.mArg);
 					if (mWaiting != mTimers.End()) { // The entry may be deleted in handler
-						if (mTimers[mWaiting].mPeriod) {
-							TimevalAddMs(&mTimers[mWaiting].mExpires, mTimers[mWaiting].mPeriod);
+						if (tmr.mPeriod) {
+							TimevalAddMs(&tmr.mExpires, tmr.mPeriod);
 						} else {
 							mTimers.Remove(mWaiting);
 						}

@@ -22,7 +22,7 @@ public:
 			, mDriftMs	(drift)
 		{}
 
-		void Callback() {
+		void Callback(void*) {
 			TS_ASSERT(mFiredQty < FIRES_MAX);
 			mFired[mFiredQty++] = mCounter.Reset();
 			if (mDriftMs) {
@@ -44,7 +44,7 @@ public:
 			tc.SetTimer(XTimerContext::Handler(this, &TestHandlerCancel::Callback), 10, 10);
 		}
 
-		void Callback() {
+		void Callback(void*) {
 			mFiredQty++;
 			if (mFiredQty == 3) {
 				tc.CancelTimer(XTimerContext::Handler(this, &TestHandlerCancel::Callback));

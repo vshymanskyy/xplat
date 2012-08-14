@@ -17,7 +17,7 @@
 class XTimerContext : private XThread
 {
 public:
-	typedef XDelegate< void () > Handler;
+	typedef XDelegate< void (void*) > Handler;
 
 public:
 	XTimerContext()
@@ -39,16 +39,21 @@ public:
 		close(mPipe[1]);
 	}
 
-	void SetTimer(Handler h, uint32_t ms, uint32_t repeat = 0);
+	static XTimerContext& Global() {
+		static XTimerContext _instance;
+		return _instance;
+	}
 
-	void CancelTimer(Handler h) {
+	void SetTimer(Handler h, uint32_t ms, uint32_t repeat = 0, void* arg = NULL);
+
+	void CancelTimer(Handler h, void* arg = NULL) {
 		mLock.Lock();
-		if ((mWaiting != mTimers.End()) && (mTimers[mWaiting].mHandler == h)) {
+		if ((mWaiting != mTimers.End()) && (mTimers[mWaiting].mHandler == h) && (mTimers[mWaiting].mArg == arg)) {
 			mTimers.Remove(mWaiting);
 			mWaiting = mTimers.End();
 		} else {
 			for (XList<TimerEntry>::It it = mTimers.First(); it != mTimers.End(); ++it) {
-				if (mTimers[it].mHandler == h) {
+				if ((mTimers[it].mHandler == h) && (mTimers[it].mArg == arg)) {
 					mTimers.Remove(it);
 				}
 			}
@@ -60,10 +65,11 @@ public:
 private:
 
 	struct TimerEntry {
-		timeval mExpires;
-		uint32_t mPeriod;
-		Handler mHandler;
-		int mId;
+		timeval		mExpires;
+		uint32_t	mPeriod;
+		Handler		mHandler;
+		void*		mArg;
+		int			mId;
 	};
 
 	virtual void Stop() {

@@ -52,17 +52,26 @@
 
 	#define X_ANSI_CLEAR "\x1b[2J"
 
+
 	void XLogger::AddEntry(const XLog::Stream::Data* data)
 	{
 		//TODO: lock
 		const char* title = (data->mLog && data->mLog->GetName().Length())?((char*)data->mLog->GetName()):(data->mFunc);
 
+#ifdef COLOR
 		const char* fmt =
 				(data->mLevel <= XLog::CRIT) ? "%4d"X_ANSI_FC_GREEN" %02d:%02d:%02d.%03d"X_ANSI_FC_CYAN" %s:"X_ANSI_FC_RED" %s"X_ANSI_RESET"\n":
 				(data->mLevel == XLog::WARN) ? "%4d"X_ANSI_FC_GREEN" %02d:%02d:%02d.%03d"X_ANSI_FC_CYAN" %s:"X_ANSI_FC_YELLOW" %s"X_ANSI_RESET"\n":
 				(data->mLevel >= XLog::LOTS) ? "%4d"X_ANSI_FC_GREEN" %02d:%02d:%02d.%03d"X_ANSI_FC_CYAN" %s:"X_ANSI_DIM" %s"X_ANSI_RESET"\n":
 				"%4d"X_ANSI_FC_GREEN" %02d:%02d:%02d.%03d"X_ANSI_FC_CYAN" %s:"X_ANSI_RESET" %s\n";
 
+#else
+		const char* fmt =
+				(data->mLevel <= XLog::CRIT) ? "%4d %02d:%02d:%02d.%03d %s: %s\n":
+				(data->mLevel == XLog::WARN) ? "%4d %02d:%02d:%02d.%03d %s: %s\n":
+				(data->mLevel >= XLog::LOTS) ? "%4d %02d:%02d:%02d.%03d %s: %s\n":
+				"%4d %02d:%02d:%02d.%03d %s: %s\n";
+#endif
 		fprintf((data->mLevel < XLog::WARN)?stderr:stdout, fmt, data->mTid,
 			data->mTime.hour,
 			data->mTime.minute,
@@ -70,6 +79,7 @@
 			data->mTime.msecond,
 			title, data->mMsg);
 	}
+
 #endif
 
 
