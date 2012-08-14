@@ -165,17 +165,17 @@ public:
 
 public:
 
-	XLog(const char* name = NULL, Level level = NORM, XLogger* logger = NULL);
+	XLog(const char* name = "", Level level = NORM, XLogger* logger = NULL);
 
 	~XLog();
 
-	XString GetName() const { return mName; }
-	void SetName(const XString& name) { mName = name; }
+	const char* GetName() const { return mName; }
+	void SetName(const char* name) { if (!name) { mName[0] = '\0'; } else { strncpy(mName, name, sizeof(mName)); mName[sizeof(mName)-1] = '\0';} }
 	Level GetLevel() const { return mLevel; }
 	void SetLevel(const Level l) { mLevel = l; }
 
 private:
-	XString mName;
+	char mName[32];
 	Level mLevel;
 	XLogger* mLogger;
 };
@@ -241,8 +241,9 @@ private:
 
 inline
 XLog::XLog(const char* name, Level level, XLogger* logger)
-		: mName(name), mLevel(level), mLogger(logger)
+		: mLevel(level), mLogger(logger)
 {
+	SetName(name);
 	XLogManager::Get().AddLog(this);
 }
 

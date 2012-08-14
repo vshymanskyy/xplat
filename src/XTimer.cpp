@@ -124,16 +124,18 @@
 				mLock.Lock();
 				if (mWaiting != mTimers.End()) { // The entry may be deleted during sleep
 					TimerEntry& tmr = mTimers[mWaiting];
-					tmr.mHandler(tmr.mArg);
-					if (mWaiting != mTimers.End()) { // The entry may be deleted in handler
-						if (tmr.mPeriod) {
-							TimevalAddMs(&tmr.mExpires, tmr.mPeriod);
-						} else {
-							mTimers.Remove(mWaiting);
-						}
+					Handler handler = tmr.mHandler;
+					void* arg = tmr.mArg;
+					if (tmr.mPeriod) {
+						TimevalAddMs(&tmr.mExpires, tmr.mPeriod);
+					} else {
+						mTimers.Remove(mWaiting);
 					}
+					mLock.Unlock();
+					handler(arg);
+				} else {
+					mLock.Unlock();
 				}
-				mLock.Unlock();
 			} else if (qty == 1 && FD_ISSET(mPipe[0], &mReadSet)) {
 				// Waked, clear pipe
 				char buff[16];

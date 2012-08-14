@@ -6,7 +6,7 @@
 	void XLogger::AddEntry(const XLog::Stream::Data* data)
 	{
 		//TODO: lock
-		const char* title = (data->mLog && data->mLog->GetName())?(data->mLog->GetName()):(data->mFunc);
+		const char* title = (data->mLog && data->mLog->GetName()[0])?(data->mLog->GetName()):(data->mFunc);
 		const XString str = XString::Format("%4d %02d:%02d:%02d.%03d %s: %s\n", data->mTid,
 			data->mTime.hour,
 			data->mTime.minute,
@@ -56,7 +56,7 @@
 	void XLogger::AddEntry(const XLog::Stream::Data* data)
 	{
 		//TODO: lock
-		const char* title = (data->mLog && data->mLog->GetName().Length())?((char*)data->mLog->GetName()):(data->mFunc);
+		const char* title = (data->mLog && data->mLog->GetName()[0])?((char*)data->mLog->GetName()):(data->mFunc);
 
 #ifdef COLOR
 		const char* fmt =

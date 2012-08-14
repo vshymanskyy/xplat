@@ -33,7 +33,7 @@ public:
 			data->mTime.minute,
 			data->mTime.second,
 			data->mTime.msecond,
-			(data->mLog && data->mLog->GetName().Length())?
+			(data->mLog && data->mLog->GetName()[0])?
 			((char*)data->mLog->GetName()):(data->mFunc),
 			data->mMsg);
 		fflush(mFile);
