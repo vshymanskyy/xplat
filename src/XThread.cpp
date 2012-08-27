@@ -15,7 +15,7 @@
 	} THREADNAME_INFO;
 	#pragma pack(pop)
 
-	static void SetThreadName(DWORD dwThreadID, char* threadName)
+	static void SetThreadName(DWORD dwThreadID, const char* threadName)
 	{
 		THREADNAME_INFO info;
 		info.dwType = 0x1000;

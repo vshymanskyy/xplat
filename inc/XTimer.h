@@ -100,7 +100,7 @@ private:
 class XTimerContext
 {
 public:
-	typedef XDelegate< void () > Handler;
+	typedef XDelegate< void (void*) > Handler;
 
 public:
 	XTimerContext() {
@@ -121,10 +121,16 @@ public:
 		mLock.Unlock();
 	}
 
-	void SetTimer(Handler h, uint32_t ms, uint32_t repeat = 0) {
+	static XTimerContext& Global() {
+		static XTimerContext _instance;
+		return _instance;
+	}
+
+	void SetTimer(Handler h, uint32_t ms, uint32_t repeat = 0, void* arg = NULL) {
 		TimerEntry* entry = new TimerEntry();
 		entry->mContext = this;
 		entry->mHandler = h;
+		entry->mArg = arg;
 		entry->mOnce = (repeat == 0);
 		mLock.Lock();
 		mTimers.Append(entry);
@@ -139,10 +145,10 @@ public:
 		mLock.Unlock();
 	}
 
-	void CancelTimer(Handler h) {
+	void CancelTimer(Handler h, void* arg = NULL) {
 		mLock.Lock();
 		for (XList<TimerEntry*>::It it = mTimers.First(); it != mTimers.End(); ++it) {
-			if (mTimers[it]->mHandler == h) {
+			if (mTimers[it]->mHandler == h && mTimers[it]->mArg == arg) {
 				DeleteTimerQueueTimer (hTimerQueue, mTimers[it]->mTimer, NULL);
 				delete mTimers[it];
 				mTimers.Remove(it);
@@ -156,7 +162,7 @@ private:
 	static VOID CALLBACK TimerRoutine(PVOID lpParam, BOOLEAN TimerOrWaitFired)
 	{
 		if (TimerEntry* entry = (TimerEntry*)lpParam) {
-			entry->mHandler();
+			entry->mHandler(entry->mArg);
 			if (entry->mOnce) {
 				//entry->mContext->mLock.Lock();
 				//DeleteTimerQueueTimer (entry->mContext->hTimerQueue, entry->mTimer, NULL);
@@ -173,6 +179,7 @@ private:
 	struct TimerEntry {
 		XTimerContext* mContext;
 		Handler mHandler;
+		void* mArg;
 		HANDLE mTimer;
 		bool mOnce;
 	};
