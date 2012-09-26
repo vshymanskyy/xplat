@@ -135,8 +135,8 @@ ssize_t XSerialTty::Read(void* data, unsigned length)
 
 void XSerialTty::DumpStats() const
 {
-	printf(" tx bytes : %d\n", mStats.txBytes);
-	printf(" rx bytes : %d\n", mStats.rxBytes);
+	printf(" tx bytes : %ld\n", mStats.txBytes);
+	printf(" rx bytes : %ld\n", mStats.rxBytes);
 
 	printf(" tx errors: %d\n", mStats.txErrors);
 	printf(" rx errors: %d\n", mStats.rxErrors);

@@ -69,10 +69,10 @@ public:
 
 			void IncRef() { ++mRef; }
 			unsigned DecRef() { return --mRef; }
-			void IncPos(int qty) { if (qty > 0) { mPos += qty; } }
+			void IncPos(long qty) { if (qty > 0) { mPos += qty; } }
 			char* GetPos() const { return mPos; }
-			unsigned GetQty() const { return mMsg+X_COUNTOF(mMsg)-mPos-1; }
-			unsigned GetMsgLen() const { return mPos-mMsg; }
+			long GetQty() const { return mMsg+X_COUNTOF(mMsg)-mPos-1; }
+			long GetMsgLen() const { return mPos-mMsg; }
 		public:
 			char mMsg[__LOG_ENTRY_SIZE];
 			const char* mFunc;
@@ -136,7 +136,7 @@ public:
 			if (!s) {
 				s = "<null>";
 			}
-			size_t len = strlen(s);
+			long len = strlen(s);
 			if (len > mData->GetQty())
 				len = mData->GetQty();
 			memcpy(mData->GetPos(), s, len);

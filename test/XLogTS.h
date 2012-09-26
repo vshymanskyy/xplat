@@ -26,11 +26,11 @@ public:
 		}
 
 		const char* LastMsg() const { return mLastMsgBuff; }
-		unsigned LastMsgLen() const { return mLastMsgLen; }
+		long LastMsgLen() const { return mLastMsgLen; }
 
 	private:
 		char mLastMsgBuff[__LOG_ENTRY_SIZE];
-		unsigned mLastMsgLen;
+		long mLastMsgLen;
 	};
 
 	void testLog(void)

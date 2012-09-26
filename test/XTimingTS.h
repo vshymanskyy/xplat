@@ -31,7 +31,7 @@ public:
 		}
 
 		XTimeCounter mCounter;
-		int mFired[FIRES_MAX];
+		long mFired[FIRES_MAX];
 		int mFiredQty;
 		int mDriftMs;
 	};

@@ -26,8 +26,8 @@ private:
 	XLog mLog;
 
 	struct Statistics {
-		unsigned txBytes;
-		unsigned rxBytes;
+		unsigned long txBytes;
+		unsigned long rxBytes;
 		unsigned txErrors;
 		unsigned rxErrors;
 	} mStats;

@@ -95,7 +95,7 @@ T LinearMap(T x, T in_min, T in_max, T out_min, T out_max)
 inline
 void RandInit()
 {
-	srand ( time(NULL) );
+	srand ((unsigned)time(NULL));
 }
 
 inline
@@ -119,7 +119,7 @@ char** CommandLineToArgv(const char* command, int* _argc)
 	char** argv;
 	char*  _argv;
 	size_t len;
-	size_t argc;
+	int argc;
 	char   a;
 	size_t i, j;
 

@@ -72,7 +72,7 @@ public:
 	bool IsMulticast() const;
 	bool IsAny() const;
 
-	const socklen_t SA_LEN() const {
+	socklen_t SA_LEN() const {
 		switch (sa.sa_family) {
 		case AF_INET:	return sizeof(sa_in);
 		case AF_INET6:	return sizeof(sa_in6);
@@ -80,7 +80,7 @@ public:
 		}
 	}
 
-	void Port (unsigned p) {
+	void Port (in_port_t p) {
 		switch (sa.sa_family) {
 		case AF_INET:	sa_in.sin_port = htons(p);		break;
 		case AF_INET6:	sa_in6.sin6_port = htons(p);	break;

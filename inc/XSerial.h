@@ -21,8 +21,10 @@ struct ISerial {
 	virtual ssize_t WriteExactly(const void* data, unsigned length) {
 		for (unsigned sent = 0; sent < length; ) {
 			ssize_t len = Write((char*)data + sent, length - sent);
-			if (len == -1) return -1;
-			sent += len;
+			if (len < 0)
+				return -1;
+			else
+				sent += (unsigned)len;
 		}
 		return length;
 	}
@@ -30,8 +32,10 @@ struct ISerial {
 	virtual ssize_t ReadExactly(void* data, unsigned length) {
 		for (unsigned rcvd = 0; rcvd < length; ) {
 			ssize_t len = Read((char*)data + rcvd, length - rcvd);
-			if (len == -1) return -1;
-			rcvd += len;
+			if (len < 0)
+				return -1;
+			else
+				rcvd += (unsigned)len;
 		}
 		return length;
 	}

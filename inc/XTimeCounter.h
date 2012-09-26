@@ -18,13 +18,13 @@
 			QueryPerformanceCounter(&mStart);
 		}
 
-		int Reset() {
+		long Reset() {
 			LARGE_INTEGER prev = mStart;
 			QueryPerformanceCounter(&mStart);
 			return ((mStart.QuadPart-prev.QuadPart)*1000)/mFreq.QuadPart;
 		}
 
-		int Elapsed() const {
+		long Elapsed() const {
 			LARGE_INTEGER curr;
 			QueryPerformanceCounter(&curr);
 			return ((curr.QuadPart-mStart.QuadPart)*1000)/mFreq.QuadPart;
@@ -45,13 +45,13 @@
 			gettimeofday(&mStart, NULL);
 		}
 
-		int Reset() {
+		long Reset() {
 			timeval prev = mStart;
 			gettimeofday(&mStart, NULL);
 			return timevaldiff(mStart, prev);
 		}
 
-		int Elapsed() const {
+		long Elapsed() const {
 			timeval curr;
 			gettimeofday(&curr, NULL);
 			return timevaldiff(curr, mStart);

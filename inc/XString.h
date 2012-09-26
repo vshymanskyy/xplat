@@ -34,7 +34,7 @@ private:
 	ssize_t Compare(const XString& s)const;
 
 	/// @param s Length of the buffer
-	XString(size_t len);
+	XString(unsigned len);
 
 public:
 	/// Default constructor

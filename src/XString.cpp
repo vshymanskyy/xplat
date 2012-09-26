@@ -38,7 +38,7 @@ XString::XString() {
 
 XString::XString(const char* s)
 {
-	const unsigned len = s?strlen(s):0;
+	const unsigned len = s?(unsigned)strlen(s):0;
 	if (len) {
 		mRefData = (RefCountedData*) malloc (len + sizeof(RefCountedData));
 		memcpy (mRefData->buffer, s, len+1);
@@ -57,7 +57,7 @@ XString::XString(const XString& s)
 	mRefData->refcount++;
 }
 
-XString::XString(size_t len)
+XString::XString(unsigned len)
 {
 	if (len) {
 		mRefData = (RefCountedData*) malloc (len + sizeof(RefCountedData));
@@ -163,7 +163,7 @@ XString::Substring(int offset, unsigned length) const
 	if (Length() == 0) return XString();
 
 	if (offset < 0) offset += Length();
-	if (offset < 0 || offset >= Length()) return XString();
+	if (offset < 0 || offset >= int(Length())) return XString();
 
 	if (offset + length > Length()) length = Length()-offset;
 	XString buff(length);
@@ -190,12 +190,12 @@ XString::Find(const XString& s, int offset) const
 	if (Length() == 0) return -1;
 
 	if (offset < 0) offset += Length();
-	if (offset < 0 || offset >= Length()) return -1;
+	if (offset < 0 || offset >= int(Length())) return -1;
 
 
-	const char* p = strstr(mRefData->buffer+offset, s);
+	const char* p = strstr(mRefData->buffer + offset, s);
 	if (p) {
-		return p-mRefData->buffer;
+		return int(p - mRefData->buffer);
 	} else {
 		return -1;
 	}
