@@ -114,6 +114,20 @@ void MemRand(void* dst, unsigned len)
 }
 
 inline
+void MemXorKey(void* dst, size_t n, const char* key)
+{
+	const char* s = key;
+	char* d = (char*)dst;
+
+	for (; n > 0; n--) {
+		if (*s == '\0') {
+			s = key;
+		}
+		*d++ ^= *s++;
+	}
+}
+
+inline
 char** CommandLineToArgv(const char* command, int* _argc)
 {
 	char** argv;
