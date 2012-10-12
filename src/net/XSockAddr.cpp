@@ -74,10 +74,7 @@ XString XSockAddr::ResolveName() const
 XList<XSockAddr> XSockAddr::Lookup(const XString& str)
 {
 	XList<XSockAddr> res;
-    addrinfo hint, *info = NULL;
-    memset(&hint, 0, sizeof(hint));
-    hint.ai_family = AF_UNSPEC;
-    hint.ai_protocol = SOCK_DGRAM;
+    addrinfo *info = NULL;
 
     // Detect IPv6 with port
     if (str[0] == '[') {
@@ -85,10 +82,11 @@ XList<XSockAddr> XSockAddr::Lookup(const XString& str)
     	if (e > 0) {
     		XString name = str.Substring(0, e-1);
     		XString serv = str.Substring(e+2);
-			if (0 == getaddrinfo(name, serv, &hint, &info)) {
+			if (0 == getaddrinfo(name, NULL, NULL, &info)) {
 				for(addrinfo* i = info; i != NULL; i = i->ai_next) {
 					XSockAddr addr;
 					memcpy(&addr.sa, i->ai_addr, i->ai_addrlen);
+					addr.Port(atoi(serv));
 					res.Append(addr);
 				}
 				freeaddrinfo(info);
@@ -98,7 +96,7 @@ XList<XSockAddr> XSockAddr::Lookup(const XString& str)
     }
 
     // Detect addr without port
-	if (0 == getaddrinfo(str, NULL, &hint, &info)) {
+	if (0 == getaddrinfo(str, NULL, NULL, &info)) {
 		for(addrinfo* i = info; i != NULL; i = i->ai_next) {
 			XSockAddr addr;
 			memcpy(&addr.sa, i->ai_addr, i->ai_addrlen);
@@ -112,10 +110,17 @@ XList<XSockAddr> XSockAddr::Lookup(const XString& str)
 		int e = str.Find(":");
 		XString name = str.Substring(0, e);
 		XString serv = str.Substring(e+1);
-		if (0 == getaddrinfo(name, serv, &hint, &info)) {
+		if (!name.Length()) {
+			return res;
+		}
+		fprintf(stderr, "Resolving: %s\n", (char*)name);
+		if (int error = getaddrinfo((char*)name, NULL, NULL, &info)) {
+			X_FATAL("%d: %s", error, gai_strerror(error));
+		} else {
 			for(addrinfo* i = info; i != NULL; i = i->ai_next) {
 				XSockAddr addr;
 				memcpy(&addr.sa, i->ai_addr, i->ai_addrlen);
+				addr.Port(atoi(serv));
 				res.Append(addr);
 			}
 			freeaddrinfo(info);

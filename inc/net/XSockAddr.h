@@ -107,6 +107,7 @@ public:
 		switch (sa.sa_family) {
 		case AF_INET:	sa_in.sin_port = htons(p);		break;
 		case AF_INET6:	sa_in6.sin6_port = htons(p);	break;
+		default:		X_FATAL("Unknown AF");			break;
 		}
 	}
 
