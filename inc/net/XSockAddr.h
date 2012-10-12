@@ -58,7 +58,7 @@ public:
 	XSockAddr(const XString& str);
 
 	XString ToString() const;
-	XString Resolve() const;
+	XString ResolveName() const;
 
 	sockaddr* SA() { return &sa; };
 	sockaddr_in* SA4() { return &sa_in; };
@@ -68,9 +68,32 @@ public:
 	const sockaddr_in6* SA6() const { return &sa_in6; };
 
 	bool IsLocal() const;
-	bool IsLoopback() const;
+
+	bool IsLoopback() const {
+		switch (sa.sa_family) {
+		case AF_INET:	return sa_in.sin_addr.s_addr == INADDR_LOOPBACK;
+		case AF_INET6:	return !memcmp(&sa_in6.sin6_addr, &in6addr_loopback, sizeof(sa_in6.sin6_addr));
+		default:		return false;
+		}
+	}
+
 	bool IsMulticast() const;
-	bool IsAny() const;
+
+	bool IsAny() const {
+		switch (sa.sa_family) {
+		case AF_INET:	return sa_in.sin_addr.s_addr == INADDR_ANY;
+		case AF_INET6:	return !memcmp(&sa_in6.sin6_addr, &in6addr_any, sizeof(sa_in6.sin6_addr));
+		default:		return false;
+		}
+	}
+
+	bool IsBroadcast() const {
+		switch (sa.sa_family) {
+		case AF_INET:	return sa_in.sin_addr.s_addr == INADDR_BROADCAST;
+		case AF_INET6:	return false;
+		default:		return false;
+		}
+	}
 
 	socklen_t SA_LEN() const {
 		switch (sa.sa_family) {
@@ -87,7 +110,7 @@ public:
 		}
 	}
 
-	unsigned Port () {
+	unsigned Port () const {
 		switch (sa.sa_family) {
 		case AF_INET:	return ntohs(sa_in.sin_port);		break;
 		case AF_INET6:	return ntohs(sa_in6.sin6_port);	break;

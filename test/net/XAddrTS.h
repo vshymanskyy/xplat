@@ -102,7 +102,7 @@ public:
 
 
 		for (unsigned i=0; i<X_COUNTOF(addr); i+=2) {
-			XString addr1 = XSockAddr(addr[i]).Resolve();
+			XString addr1 = XSockAddr(addr[i]).ResolveName();
 			if (addr1 != addr[i+1]) {
 				TS_FAIL((char*)(addr1 + " - " + addr[i+1]));
 			}

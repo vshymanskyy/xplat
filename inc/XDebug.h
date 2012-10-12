@@ -38,4 +38,9 @@
 #define X_ASSERT_LT(expr, val, fmt) { if (!((expr) <  (val))) { X_DBG_PRINT("Assertion '" #expr " < "  #val "' failed ( " fmt " >= " fmt " ) at %s:%d\n", (expr), (val), __FILE__, __LINE__); X_DBG_BREAK(); } }
 #define X_ASSERT_LE(expr, val, fmt) { if (!((expr) <= (val))) { X_DBG_PRINT("Assertion '" #expr " <= " #val "' failed ( " fmt " > "  fmt " ) at %s:%d\n", (expr), (val), __FILE__, __LINE__); X_DBG_BREAK(); } }
 
+class XStackTrace {
+public:
+	XStackTrace();
+};
+
 #endif /* _X_DEBUG_H_ */
