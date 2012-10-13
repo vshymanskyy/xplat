@@ -147,6 +147,8 @@
 	#elif defined(_M_ARM)
 		#define TARGET_ARCH_ARM
 	#endif
+#else
+#error "Unknown compiler"
 #endif
 
 /* Fill target arch data */

@@ -21,6 +21,7 @@
 //#define LOG_STR(val) STRINGIFY(val)
 //#define LOG_VAL(val) "(" LOG_STR(val) ")" << " = " << (val)
 //#define LOG_LEVEL_MAX XLog::WARN
+//#define LOG_LEVEL_MAX -1
 
 #ifdef LOG_LEVEL_MAX
 #define __LOG(log, level, ...) { const XLog& __l = log; if (LOG_LEVEL_MAX >= level && __l.GetLevel() >= level) { XLog::Stream logTrace(&__l, level, __FUNCTION__, __FILE__, __LINE__); logTrace << __VA_ARGS__; } }

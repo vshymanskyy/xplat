@@ -10,7 +10,7 @@
 #endif
 
 #if defined (TARGET_OS_WINDOWS)
-	#include <Windows.h>
+	#include <windows.h>
 	#include <stdio.h>
 	
 	#define X_DBG_BREAK() DebugBreak();
